@@ -4,6 +4,8 @@ let outputField = document.getElementById('output');
 const emptyKeyValue = /"(\w+)":\s*""/g;
 const replacementKeyValue = '<span class="highlighted">"$1": ""</span>';
 
+updateInputField();
+
 function updateOutputField() {
   let outputFieldValue = {};
   let parsedUrl;
@@ -58,4 +60,59 @@ function updateOutputField() {
   // console.log(`pathname: ${parsedUrl.pathname}`); // "/path/to/resource"
   // console.log(JSON.stringify(searchParams)); // '{"foo":"bar","baz":"qux"}'
   
+}
+
+function updateInputField() {
+  // Get the URLSearchParams object from the current document's URL search parameters
+  const urlSearchParams = new URLSearchParams(window.location.search);
+
+  const inputFieldValue = urlSearchParams.get('share');
+  console.log(inputFieldValue);
+  console.log(decodeURIComponent(atob(inputFieldValue)));
+  const inputFieldDecoded = decodeURIComponent(atob(inputFieldValue));
+
+  // console.log(inputFieldDecoded);
+  inputField.value = inputFieldDecoded;
+}
+
+function shareInputField() {
+  const inputFieldValue = inputField.value;
+
+  const inputFieldEncoded = encodeURIComponent(btoa(inputFieldValue));
+
+  copyToClipboard(inputFieldEncoded);
+  console.log(inputFieldValue);
+  console.log(inputFieldEncoded);
+}
+
+function copyToClipboard(text) {
+  // Get the Window Origin & Pathname
+  const origin = window.location.origin;
+  const pathname = window.location.pathname;
+  const domain = origin + pathname;
+
+  // Create a new textarea element
+  var textarea = document.createElement('textarea');
+
+  // Set the value of the textarea to the text you want to copy
+  textarea.value = domain + '?share=' + text;
+
+  // Make sure to make the textarea non-editable to avoid accidental user changes
+  textarea.setAttribute('readonly', '');
+
+  // Hide the textarea from view
+  textarea.style.position = 'absolute';
+  textarea.style.left = '-9999px';
+
+  // Append the textarea to the DOM
+  document.body.appendChild(textarea);
+
+  // Select the text inside the textarea
+  textarea.select();
+
+  // Copy the selected text to the clipboard
+  document.execCommand('copy');
+
+  // Clean up - remove the textarea from the DOM
+  document.body.removeChild(textarea);
 }
