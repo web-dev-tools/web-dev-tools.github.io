@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- General Info -->
+    <title>URL Parser</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚾</text></svg>">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex">
+
+    <!-- Styles -->
+    <link href='./style-parser.css' rel="stylesheet">
+    <link href='../style.css' rel="stylesheet">
+  </head>
+  <body>
+    <header>
+      <h1>URL Parser & Decoder</h1>
+      <div class="divider"></div>
+    </header>
+    <main>
+      
+      <section id="primary">
+        <section id="parser-input">
+          <h4>Input</h4>
+          <textarea id="input">https://www.google.com/</textarea>
+          <div class="divider" style="grid-row:span 2"></div>
+          <h4>Controls</h4>
+          <button class="btn" onclick="updateOutputField()">Parse URL</button>
+          <div class="form-group">
+            <label class="form-switch">
+              <input type="checkbox" name="json" checked="true">
+              <i class="form-icon"></i> Convert to JSON
+            </label>
+          </div>
+        </section>
+        
+        <div class="divider-vert" style="grid-row:span 2"></div>
+        <section id="parser-output">
+          <h4>Output</h4>
+          <pre id="output">
+            
+          </pre>
+        </section>
+
+        <section id="options">
+          
+        </section>
+      </section>
+      
+    </main>
+    <footer>
+      <div class="divider"></div>
+      <p>Updated 2023.03.27<br>
+      Created with ❤️ by A. Dean Kelly</p>
+      <script src="parser.js"></script>
+    </footer>
+  </body>
+</html>

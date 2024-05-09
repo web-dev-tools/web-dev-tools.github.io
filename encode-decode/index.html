@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>URL Encode/Decode Tool</title>
+    <meta name="robots" content="noindex">
+    <meta charset="UTF-8">
+    <meta name="description" content="A tool for encoding & decoding text">
+    <meta name="keywords" content="Encode, Decode, URL">
+    <meta name="author" content="A. Dean Kelly">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="./style-encode-decode.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚾</text></svg>">
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>URL Encode & Decode Text</h1>
+        <div class="divider"></div>
+      </header>
+      <section><textarea id="input-box"></textarea></section>
+      <section id="button-section">
+        <button class='btn' onclick="encodeText()">Encode</button>
+        <button class="btn" onclick="decodeText()">Decode</button>
+      </section>
+      <section><textarea id="output-box"></textarea></section>
+      <footer><div class="divider"></div></footer>
+      <script src="./encode-decode.js"></script>
+    </main>
+  </body>
+</html>

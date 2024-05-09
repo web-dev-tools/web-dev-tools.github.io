@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>VAST Inspector</title>
+    <meta name='description' content='A Console-specific VAST Inspector Tool' />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href='../style.css' >
+    <link rel="stylesheet" href="style-vast-inspector.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚾</text></svg>">
+    <script src="//imasdk.googleapis.com/js/sdkloader/ima3.js"></script>
+  </head>
+<body>
+  <header>
+    <h1>VAST Inspector</h1>
+    <div class="divider"></div>
+  </header>
+  <main>
+    <section id='input-section'>
+      <h4>VAST Input</h4>
+      <textarea id="input-vast"></textarea>
+      <div class="divider" style="grid-row:span 2"></div>
+      <div class="form-group">
+        <label class="form-switch">
+          <input id="vpaid-input" type="checkbox" name="vpaid">
+          <i class="form-icon"></i> Vpaid Mode
+        </label>
+      </div>
+    </section>
+    <section id='video-section'>
+      <h4>VAST Player</h4>
+      <div id="video-container">
+        <video id="video-element" muted>
+          <source src="https://storage.googleapis.com/interactive-media-ads/media/android.mp4">
+          <source src="https://storage.googleapis.com/interactive-media-ads/media/android.webm">
+        </video>
+        <div id="ad-container"></div>
+      </div>
+      <button class='btn btn-block' id="play-button">Play</button>
+    </section>
+  </main>
+  <footer>
+    <div class="divider"></div>
+    <p>Updated 2023.09.15<br>
+    Created with ❤️ by A. Dean Kelly</p>
+    <script src='vast-inspector.js'></script>
+  </footer>
+</body>
+</html>

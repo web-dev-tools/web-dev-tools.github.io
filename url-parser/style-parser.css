@@ -1,0 +1,50 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  position: relative;
+}
+
+main {
+  margin: 48px auto;
+  max-width: 1280px;
+}
+
+#primary {
+  display: grid;
+  grid-template-columns: 2fr auto 3fr;
+  grid-gap: 16px;
+}
+
+#input {
+  width: 100%;
+  min-height: 256px;
+}
+#parser-output {
+  grid-row: span 2;
+}
+#output {
+  width: 100%;
+  max-width: 728px;
+  min-height: 256px;
+  overflow-x: scroll;
+}
+#options {
+  width: 100%;
+  min-height: 256px;
+}
+.hljs-attr:after {
+  content: ':';
+}
+
+.hljs-attr:empty:after {
+  content: ':';
+  color: #ff8383;
+}
+
+.highlighted {
+  padding: 4px;
+  color: white;
+  background-color: red;
+  border-radius: 4px;
+}
