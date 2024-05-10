@@ -67,9 +67,11 @@ function updateInputField() {
   const urlSearchParams = new URLSearchParams(window.location.search);
 
   const inputFieldValue = urlSearchParams.get('share');
-  console.log(inputFieldValue);
-  console.log(decodeURIComponent(atob(inputFieldValue)));
-  const inputFieldDecoded = decodeURIComponent(atob(inputFieldValue));
+  if (inputFieldValue == null) {
+    return;
+  }
+
+  const inputFieldDecoded = atob(decodeURIComponent(inputFieldValue));
 
   // console.log(inputFieldDecoded);
   inputField.value = inputFieldDecoded;
@@ -78,7 +80,8 @@ function updateInputField() {
 function shareInputField() {
   const inputFieldValue = inputField.value;
 
-  const inputFieldEncoded = encodeURIComponent(btoa(inputFieldValue));
+  let inputFieldEncoded = btoa(inputFieldValue);
+  inputFieldEncoded= encodeURIComponent(inputFieldEncoded)
 
   copyToClipboard(inputFieldEncoded);
   console.log(inputFieldValue);
