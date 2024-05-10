@@ -75,6 +75,7 @@ function updateInputField() {
 
   // console.log(inputFieldDecoded);
   inputField.value = inputFieldDecoded;
+  updateOutputField()
 }
 
 function shareInputField() {
