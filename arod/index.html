@@ -1,47 +1,20 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="style.css">
-    <script src="/assets/ffmpeg/package/dist/umd/ffmpeg.js"></script>
-    <script src="/assets/util/package/dist/umd/index.js"></script>
+    <title>Advertising Resizer, Optimizer, and Downloader Tool | Web Dev Tools</title>
+    <meta name="robots" content="noindex">
+    <meta charset="UTF-8">
+    <meta name="description" content="Advertising Specific Resizing & Optimizing Tool">
+    <meta name="keywords" content="Resize, Optimize, Download, Advertising">
+    <meta name="author" content="A. Dean Kelly">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=download,high_quality,photo_library,queue_play_next,video_library" />
+    <script type="module" crossorigin src="/arod/assets/index-Dv-mg_RH.js"></script>
+    <link rel="stylesheet" crossorigin href="/arod/assets/index-CNXBGcQZ.css">
   </head>
   <body>
-    <h3>Upload a video to transcode to mp4 (x264) and play!</h3>
-    <video id="output-video" controls></video><br/>
-    <input type="file" id="uploader">
-    <p id="message"></p>
-    <script>
-      const { fetchFile } = FFmpegUtil;
-      const { FFmpeg } = FFmpegWASM;
-      let ffmpeg = null;
+    <header></header>
+    <main id="root"></main>
 
-      const transcode = async ({ target: { files } }) => {
-        const message = document.getElementById('message');
-        if (ffmpeg === null) {
-          ffmpeg = new FFmpeg();
-          ffmpeg.on("log", ({ message }) => {
-            console.log(message);
-          })
-          ffmpeg.on("progress", ({ progress, time }) => {
-            message.innerHTML = `${progress * 100} %, time: ${time / 1000000} s`;
-          });
-          await ffmpeg.load({
-            coreURL: "/assets/core-mt/package/dist/umd/ffmpeg-core.js",
-          });
-        }
-        const { name } = files[0];
-        await ffmpeg.writeFile(name, await fetchFile(files[0]));
-        message.innerHTML = 'Start transcoding';
-        console.time('exec');
-        await ffmpeg.exec(['-i', name,  'output.mp4']);
-        console.timeEnd('exec');
-        message.innerHTML = 'Complete transcoding';
-        const data = await ffmpeg.readFile('output.mp4');
-
-        const video = document.getElementById('output-video');
-        video.src = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
-      }
-      const elm = document.getElementById('uploader');
-      elm.addEventListener('change', transcode);
-    </script>
   </body>
 </html>

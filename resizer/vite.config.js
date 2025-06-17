@@ -4,14 +4,7 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), viteStaticCopy({
-    targets: [
-      {
-        src: './node_modules/@imagemagick/magick-wasm/dist/magick.wasm',
-        dest: ''
-      }
-    ]
-    })],
+  plugins: [react()],
   esbuild: {
     loader: 'jsx',
     include: /.*\.jsx?$/,
