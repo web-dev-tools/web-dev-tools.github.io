@@ -1,0 +1,132 @@
+html, body {
+  margin: 0;
+  padding: 0;
+
+  font-family: "Open Sans", sans-serif;
+}
+header {
+  width: 100%;
+  height: 48px;
+  background-color: #807fe2;
+}
+main {
+  margin: 64px auto;
+  max-width: 1280px;
+}
+#tabs {
+  display: grid;
+  grid-template-columns: 164px 164px 1fr;
+  grid-template-rows: 36px 1fr;
+  grid-template-areas: 'tab_selection tab_section tab_section' 'tool_section tool_section tool_section';
+}
+.tab_select_input, .tab_section {
+  display: none;
+}
+.tab_select_label {
+  display: grid;
+  padding: 6px 0;
+  grid-template-columns: min-content 1fr;
+  font-size: 24px;
+  line-height: 1em;
+  color: #7f7f7f;
+  background-color: #f7f7f7;
+}
+.tab_select_label p {
+  margin: 0;
+}
+
+.tab_select_input:checked + .tab_select_label {
+  color: #000;
+  background-color: #fff;
+}
+.tab_select_input:checked + .tab_select_label + .tab_section {
+  display: block;
+  grid-area: tool_section
+}
+
+/* Material Design Icons */
+.tab_icon, .download_icon {
+  margin: 0 8px;
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+}
+
+.drop {
+  width: 356px;
+  height: 256px;
+  border:#000 1px solid;
+}
+
+.drop_zone {
+  border: 2px dashed #aaa;
+  padding: 2rem;
+  text-align: center;
+  background-color: #fff;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.drop_zone.dragging {
+  background-color: #aaa;
+}
+
+.image_preview, .video_preview {
+  position: relative;
+}
+.download_button_span {
+  position: absolute;
+  bottom: 8px;
+  right: 4px;
+}
+.download_button {
+  margin: 0 8px 0 0;
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  border-radius: 4px;
+  background-color: #807fe2;
+  cursor: pointer;
+}
+.download_button a {
+  color: #fff;
+  text-decoration: none;
+}
+
+
+.video_control_section {
+  display: grid;
+  grid-template-columns: min-content min-content;
+  grid-gap: 16px;
+}
+.image_control_button, .video_control_button {
+  display: grid;
+  min-width: 192px;
+  height: 32px;
+  color: #fff;
+  background-color: #807fe2;
+  grid-template-columns: min-content 1fr;
+  border: none;
+  border-radius: 4px;
+  align-items: center;
+  line-height: 24px;
+}
+.image_control_button:disabled, .video_control_button:disabled {
+  color: #f7f7f7;
+  background-color: #aaa;
+}
+.video_control_button .download_button {
+
+}
+.video_control_button p {
+  display: inline;
+  margin: 0;
+  font-size: 16px;
+}

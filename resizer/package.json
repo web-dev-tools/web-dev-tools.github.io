@@ -1,0 +1,26 @@
+{
+  "name": "advertising-resizer-optimizer-downloader",
+  "version": "0.1.0",
+  "description": "The Advertising Resizer Optimizer and Downloader Tool",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "author": "A. Dean Kelly",
+  "license": "ISC",
+  "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.12.15",
+    "@ffmpeg/util": "^0.12.2",
+    "@vitejs/plugin-react": "^4.5.2",
+    "jszip": "^3.10.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "vite": "^6.3.5",
+    "vite-plugin-static-copy": "^3.0.2"
+  }
+}
