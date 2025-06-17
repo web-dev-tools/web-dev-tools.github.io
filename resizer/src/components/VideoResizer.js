@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile, toBlobURL } from '@ffmpeg/util';
 import JSZip from 'jszip';
@@ -10,6 +10,8 @@ export default function VideoResizer() {
     const [zipUrl, setZipUrl] = useState('');
     const [processingStatus, setProcessingStatus] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
+  
     
     const ffmpegRef = useRef(new FFmpeg());
     const videoRef = useRef(null);
@@ -46,6 +48,22 @@ export default function VideoResizer() {
       setVideoFiles([...event.target.files]);
     };
 
+    const handleDrop = useCallback((event) => {
+      event.preventDefault();
+      setIsDragging(false);
+
+      setVideoFiles([...event.dataTransfer.files]);
+    }, []);
+  
+    const handleDragOver = (e) => {
+      e.preventDefault();
+      setIsDragging(true);
+    };
+  
+    const handleDragLeave = () => {
+      setIsDragging(false);
+    };
+
     const transcodeVideos = async () => {
 
       setProcessingStatus(true);
@@ -53,7 +71,6 @@ export default function VideoResizer() {
       setZipUrl('');
 
       const zip = new JSZip();
-
       const results = [];
 
       for (const videoFile of videoFiles) {
@@ -85,7 +102,29 @@ export default function VideoResizer() {
         <button onClick={transcodeVideos} disabled={processingStatus || !videoFiles.length}>
           {processingStatus ? 'Processing...' : 'Transcode All'}
         </button>
+        {zipUrl && (
+          <button className='download_button' style={{ marginTop: '1em' }}>
+            <a href={zipUrl} download="videos.zip">📦 Download Transcoded ZIP</a>
+          </button>
+        )}
         <p ref={messageRef}>Nothing Loaded</p>
+        <div className={`drop_zone`}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+        >
+        <p>Drag and drop files here, or click to select</p>
+        <input
+          type="file"
+          multiple
+          onChange={handleFileChange}
+          style={{ display: 'none' }}
+          id="fileInput"
+        />
+        <label htmlFor="fileInput" style={{ cursor: 'pointer', color: 'blue' }}>
+          Browse Files
+        </label>
+        </div>
         {outputUrls.length > 0 && (
           <div>
             <h3>Results</h3>
@@ -98,11 +137,7 @@ export default function VideoResizer() {
             ))}
           </div>
         )}
-        {zipUrl && (
-          <div style={{ marginTop: '1em' }}>
-            <a href={zipUrl} download="videos.zip">📦 Download Transcoded ZIP</a>
-          </div>
-        )}
+        
       </section>
     );      
 }
