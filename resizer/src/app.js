@@ -6,7 +6,7 @@ import '../src/styles/styles.css'
 
 
 export default function App() {
-  const [tabSelected, setTabSelected] = useState('image');
+  const [tabSelected, setTabSelected] = useState('video');
 
   const isSelected = (value) => tabSelected === value;
   const handleTabChange = (newTab) => {

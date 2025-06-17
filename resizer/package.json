@@ -14,9 +14,6 @@
   "dependencies": {
     "@ffmpeg/ffmpeg": "^0.12.15",
     "@ffmpeg/util": "^0.12.2",
-    "@imagemagick/magick-wasm": "^0.0.35",
-    "@silvia-odwyer/photon": "^0.3.3",
-    "@squoosh/lib": "^0.3.1",
     "@vitejs/plugin-react": "^4.5.2",
     "jszip": "^3.10.1",
     "react": "^19.1.0",

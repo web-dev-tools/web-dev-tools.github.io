@@ -45,7 +45,7 @@ main {
 }
 
 /* Material Design Icons */
-.tab_icon {
+.tab_icon, .download_icon {
   margin: 0 8px;
   font-family: 'Material Symbols Outlined';
   font-weight: normal;
@@ -64,4 +64,33 @@ main {
   width: 356px;
   height: 256px;
   border:#000 1px solid;
+}
+
+.drop_zone {
+  border: 2px dashed #aaa;
+  padding: 2rem;
+  text-align: center;
+  background-color: #fff;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.drop_zone.dragging {
+  background-color: #aaa;
+}
+
+.image_preview {
+  position: relative;
+}
+.download_button_span {
+  position: absolute;
+  bottom: 8px;
+  right: 4px;
+}
+.download_button {
+  margin: 0 8px 0 0;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  background-color: #807fe2;
+  cursor: pointer;
 }

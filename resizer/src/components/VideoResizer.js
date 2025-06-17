@@ -17,9 +17,11 @@ export default function VideoResizer() {
 
     useEffect(() => {
       async function loadTranscodeService() {
-        const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm'
+        const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
         const ffmpeg = ffmpegRef.current;
+
         // Listen to progress event instead of log.
+        // Need to move the Message Reference
         ffmpeg.on('progress', ({ progress, time }) => {
             messageRef.current.innerHTML = `${progress * 100} % (transcoded time: ${time / 1000000}s)`;
         });
