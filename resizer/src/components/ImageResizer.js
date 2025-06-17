@@ -105,6 +105,14 @@ export default function ImageResizer() {
         // Return the 300x250 Banner
         size = highRes ? [600, 500] : [300, 250];
         return size;
+      case (ratio >= 3.8 && ratio <= 3.9):
+        // Return the 300x250 Banner
+        size = highRes ? [1940, 500] : [970, 250];
+        return size;
+      case (ratio >= 0.45 && ratio <= 0.55):
+        // Return the 300x250 Banner
+        size = highRes ? [600, 1200] : [300, 600];
+        return size;
       case (ratio >= 6.3 && ratio <= 6.5):
         // Return the 320x50 Banner
         size = highRes ? [640, 100] : [320, 50];

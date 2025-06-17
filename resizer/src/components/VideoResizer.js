@@ -138,6 +138,11 @@ export default function VideoResizer() {
       a.click();
     };
 
+    const handleTogglePlay = (event) => {
+      const video = event.currentTarget;
+      video.paused ? video.play() : video.pause();
+    };
+
     return (
       <section id='video_resizer' className='tab_section'>
         <h2>Batch Video Transcoder</h2>
@@ -169,11 +174,10 @@ export default function VideoResizer() {
           Browse Files
         </label>
         {outputUrls.length > 0 && (
-          <div>
-            <h3>Results</h3>
+          <div style={{display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '1rem'}}>
             {outputUrls.map(({ name, url }) => (
               <figure className='video_preview' key={name}>
-                <video src={url} width="480" />
+                <video src={url} width="480" onClick={handleTogglePlay}/>
                 <span className='download_button_span'>
                   <a href={url} download={name} className='download_button'><i className='download_icon'>download</i></a>
                 </span>
