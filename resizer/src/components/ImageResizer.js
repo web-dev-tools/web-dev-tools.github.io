@@ -174,9 +174,9 @@ export default function ImageResizer() {
         style={{ display: 'none' }}
         id="fileInput"
       />
-      <label htmlFor="fileInput" style={{ cursor: 'pointer', color: 'blue' }}>
-        Browse Files
-      </label>
+        <button className='btn btn-primary' style={{ cursor: 'pointer' }}>
+          <label htmlFor="fileInput" style={{ cursor: 'pointer' }}>Browse Files</label>
+        </button>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '1rem' }}>
         {previews.map((file, i) => (

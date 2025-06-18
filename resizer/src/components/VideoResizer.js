@@ -3,7 +3,7 @@ import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile, toBlobURL } from '@ffmpeg/util';
 import JSZip from 'jszip';
 
-const resolutions = [1920, 1280, 1080, 720, 640, 480, 320];
+const resolutions = [320, 480, 640, 720, 1080, 1280, 1920]
 
 export default function VideoResizer() {
     const [loaded, setLoaded] = useState(false);
@@ -16,14 +16,15 @@ export default function VideoResizer() {
 
     // FFMPEG Input Flag Variables
     const [bitrateValue, setBitrateValue] = useState(2000);
-    const [widthIndexValue, setWidthIndexValue] = useState(1);
+    const [widthIndexValue, setWidthIndexValue] = useState(5);
     const bitrateRef = useRef(null);
     const widthRef = useRef(null);
   
     
     const ffmpegRef = useRef(new FFmpeg());
     const videoRef = useRef(null);
-    const messageRef = useRef(null);
+    // const messageRef = useRef(null);
+    const progressRef = useRef(null);
 
     useEffect(() => {
       console.log(zipUrl);
@@ -34,11 +35,13 @@ export default function VideoResizer() {
         // Listen to progress event instead of log.
         // Need to move the Message Reference
         ffmpeg.on('progress', ({ progress, time }) => {
-            messageRef.current.innerHTML = `${Math.trunc(progress *10000) / 100}% (transcoded time: ${Math.trunc(time /10000)/100}s)`;
+          progressRef.current.style.width = `${Math.trunc(progress * 10000) / 100}%`
+          // messageRef.current.innerHTML = `${Math.trunc(progress *10000) / 100}% (transcoded time: ${Math.trunc(time /10000)/100}s)`;
         });
 
         ffmpeg.on('complete', ({ progress, time }) => {
-            messageRef.current.innerHTML = `${progress * 100}% (transcoded time: ${time / 1000000}s)`;
+          console.log('Completed Transcoding');
+            // messageRef.current.innerHTML = `${progress * 100}% (transcoded time: ${time / 1000000}s)`;
         });
 
         // toBlobURL is used to bypass CORS issue, urls with the same
@@ -53,9 +56,8 @@ export default function VideoResizer() {
     }, []);
 
     const handleFileChange = (event) => {
-      console.log('Handle File', event.target.files);
       setVideoFiles([...event.target.files]);
-      messageRef.current.innerHTML = 'Files Loaded'
+      // messageRef.current.innerHTML = 'Files Loaded'
     };
 
     const handleDrop = useCallback((event) => {
@@ -80,8 +82,6 @@ export default function VideoResizer() {
     }
 
     const handleResolutionIndexChange = (event) => {
-        console.log(event.target.value);
-        console.log(resolutions[event.target.value]);
       setWidthIndexValue(event.target.value);
     };
 
@@ -138,25 +138,62 @@ export default function VideoResizer() {
       a.click();
     };
 
+    const handleDownloadVideo = (file, name) => {
+      const a = document.createElement('a');
+      
+      a.href = file;
+      a.download = `resized-lowRes-${name}`;
+      a.click();
+    };
+
     const handleTogglePlay = (event) => {
       const video = event.currentTarget;
-      video.paused ? video.play() : video.pause();
+      // video.paused ? video.play() : video.pause();
+
+      const wrapper = video.parentElement; // or video.parentElement if direct parent
+
+      if (video.paused) {
+        video.play();
+        wrapper.classList.add('playing');
+      } else {
+        video.pause();
+        wrapper.classList.remove('playing');
+      }
     };
 
     return (
       <section id='video_resizer' className='tab_section'>
-        <h2>Batch Video Transcoder</h2>
-        <span className='video_control_section'>
-          <button className='video_control_button' onClick={transcodeVideos} disabled={processingStatus || !videoFiles.length}>
-            <i className='download_icon'>queue_play_next</i>
-            <p>{processingStatus ? 'Processing...' : 'Transcode'}</p>
-          </button>
-          <button onClick={() => handleDownload(zipUrl)} disabled={!zipUrl} className='video_control_button download_button'>
-            <i className='download_icon'>download</i>
-            <p>Download All</p>
-          </button>
-        </span>
-        <p ref={messageRef}>Nothing Loaded</p>
+        <h2>Video Transcoder</h2>
+        <section className='video_information_section'>
+          <span className='video_control_section'>
+            <button className='video_control_button' onClick={transcodeVideos} disabled={processingStatus || !videoFiles.length}>
+              <i className='download_icon'>queue_play_next</i>
+              <p>{processingStatus ? 'Processing...' : 'Transcode'}</p>
+            </button>
+            <button onClick={() => handleDownload(zipUrl)} disabled={!zipUrl} className='video_control_button'>
+              <i className='download_icon'>download</i>
+              <p>Download All</p>
+            </button>
+            <div className="bar" style={{width: '100%', margin: '16px 0', gridColumn: 'span 2'}}>
+              <div ref={progressRef} className="bar-item tooltip" data-tooltip="50%" role="progressbar"></div>
+            </div>
+          </span>
+          <span>
+
+          </span>
+          <span className='video_settings_section'>
+            <span className='video_setting'>
+              <h3>Bitrate: {bitrateValue}kbps</h3>
+              <input className='form-range' type="range" min="250" max="4000" step="250" value={bitrateValue} onChange={handleBitrateValueChange} style={{ width: '50%' }} />
+            </span>
+            <span className='video_setting'>
+              <h3>Width: {resolutions[widthIndexValue]}px</h3>
+              <input className='form-range' type="range" min="0"  max={resolutions.length - 1} step="1" value={widthIndexValue} onChange={handleResolutionIndexChange} style={{ width: '50%' }} />
+            </span>
+          </span>
+        </section>
+
+
         <div className={`drop_zone`}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
@@ -170,29 +207,21 @@ export default function VideoResizer() {
           style={{ display: 'none' }}
           id="videoFileInput"
         />
-        <label htmlFor="videoFileInput" style={{ cursor: 'pointer', color: 'blue' }}>
-          Browse Files
-        </label>
+        <button className='btn btn-primary' htmlFor="videoFileInput" style={{ cursor: 'pointer' }}>
+          <label htmlFor="videoFileInput" style={{ cursor: 'pointer' }}>Browse Files</label>
+        </button>
         {outputUrls.length > 0 && (
           <div style={{display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '1rem'}}>
             {outputUrls.map(({ name, url }) => (
               <figure className='video_preview' key={name}>
                 <video src={url} width="480" onClick={handleTogglePlay}/>
                 <span className='download_button_span'>
-                  <a href={url} download={name} className='download_button'><i className='download_icon'>download</i></a>
-                </span>
+                  <button className='download_button' onClick={() => handleDownloadVideo(url, name)}><i className='download_icon'>download</i></button>                </span>
               </figure>
             ))}
           </div>
         )}
-        </div>
-        <div style={{ padding: '20px', textAlign: 'center' }}>
-          <h3>Choose a Bitrate: {bitrateValue}kbps</h3>
-          <input className='form-range' type="range" min="250" max="10000" step="250" value={bitrateValue} onChange={handleBitrateValueChange} style={{ width: '50%' }} />
-          <h3>Choose a Width Resolution: {resolutions[widthIndexValue]}px</h3>
-          <input className='form-range' type="range" min="0"  max={resolutions.length - 1} step="1" value={widthIndexValue} onChange={handleResolutionIndexChange} style={{ width: '50%' }} />
-        </div>
-        
+        </div>        
       </section>
     );      
 }
