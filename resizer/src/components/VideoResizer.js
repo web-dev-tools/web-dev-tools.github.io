@@ -4,6 +4,7 @@ import { fetchFile, toBlobURL } from '@ffmpeg/util';
 import JSZip from 'jszip';
 
 const resolutions = [320, 480, 640, 720, 1080, 1280, 1920]
+const durations = ['Defaut', 15, 30, 45, 60, 90]
 
 export default function VideoResizer() {
     const [loaded, setLoaded] = useState(false);
@@ -17,6 +18,7 @@ export default function VideoResizer() {
     // FFMPEG Input Flag Variables
     const [bitrateValue, setBitrateValue] = useState(2000);
     const [widthIndexValue, setWidthIndexValue] = useState(5);
+    const [durationIndexValue, setDurationIndexValue] = useState(0);
     const bitrateRef = useRef(null);
     const widthRef = useRef(null);
   
@@ -85,6 +87,10 @@ export default function VideoResizer() {
       setWidthIndexValue(event.target.value);
     };
 
+    const handleDurationIndexChange = (event) => {
+      setDurationIndexValue(event.target.value);
+    };
+
     const transcodeVideos = async () => {
 
       setProcessingStatus(true);
@@ -106,6 +112,11 @@ export default function VideoResizer() {
           '-b', `${bitrateValue * 1000}`,
           outputName
         ];
+
+        if (durationIndexValue !== 0) {
+          ffmpegFlags.splice(2,0, '-t');
+          ffmpegFlags.splice(3, 0, `${durations[durationIndexValue]}`);
+        }
 
         console.log(ffmpegFlags);
 
@@ -189,6 +200,10 @@ export default function VideoResizer() {
             <span className='video_setting'>
               <h3>Width: {resolutions[widthIndexValue]}px</h3>
               <input className='form-range' type="range" min="0"  max={resolutions.length - 1} step="1" value={widthIndexValue} onChange={handleResolutionIndexChange} style={{ width: '50%' }} />
+            </span>
+            <span className='video_setting'>
+              <h3>Duration: {durations[durationIndexValue]}</h3>
+              <input className='form-range' type="range" min="0"  max={durations.length - 1} step="1" value={durationIndexValue} onChange={handleDurationIndexChange} style={{ width: '50%' }} />
             </span>
           </span>
         </section>
