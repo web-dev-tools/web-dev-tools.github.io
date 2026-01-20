@@ -1,0 +1,10 @@
+main {
+  display: grid;
+  max-width: 1280px;
+  grid-template-columns: 2fr 3fr;
+  grid-gap: 16px;
+}
+
+canvas {
+  max-width: calc((1280px / 5) * 3);
+}
