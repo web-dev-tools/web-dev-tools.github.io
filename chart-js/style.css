@@ -1,0 +1,191 @@
+/*--- Genral Styles ---*/
+html,
+body {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-size: 16px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+label,
+input,
+select,
+summary {
+  margin: 8px 0;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2.25rem;
+}
+
+h3 {
+  font-size: 2rem;
+}
+
+h4 {
+  font-size: 1.825rem;
+}
+
+h5 {
+  font-size: 1.75rem;
+}
+
+h6 {
+  font-size: 1.625rem;
+}
+
+main,
+header,
+footer {
+  margin: 16px auto;
+  max-width: 1280px;
+}
+
+header {
+  border-bottom: 2px solid #414141;
+}
+
+footer {
+  position: sticky;
+  margin: 8px auto;
+  width: 1280px;
+  top: 100vh;
+  min-height: 64px;
+}
+
+details {
+  margin: 16px 0;
+}
+
+.divider {
+  width: 100%;
+  border-bottom: 1px solid #424242;
+}
+
+.form-group {
+  display: grid;
+  margin: 0 0 16px;
+  padding: 16px;
+  grid-template-columns: 1fr;
+  border: 2px solid #414141;
+  border-radius: 8px;
+}
+
+.form-group select {
+  width: 66%;
+}
+
+
+/* FORM SWITCH STYLES */
+.form-checkbox,
+.form-radio,
+.form-switch {
+  display: block;
+  line-height: 1.2rem;
+  margin: .2rem 0;
+  min-height: 1.4rem;
+  padding: .1rem .4rem .1rem 1.2rem;
+  position: relative;
+}
+
+.form-checkbox input,
+.form-radio input,
+.form-switch input {
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  position: absolute;
+  width: 1px;
+}
+
+.form-checkbox input:focus+.form-icon,
+.form-radio input:focus+.form-icon,
+.form-switch input:focus+.form-icon {
+  border-color: #5755d9;
+  box-shadow: 0 0 0 .1rem rgba(87, 85, 217, .2);
+}
+
+.form-checkbox input:checked+.form-icon,
+.form-radio input:checked+.form-icon,
+.form-switch input:checked+.form-icon {
+  background: #5755d9;
+  border-color: #5755d9;
+}
+
+.form-checkbox .form-icon,
+.form-radio .form-icon,
+.form-switch .form-icon {
+  border: .05rem solid #bcc3ce;
+  cursor: pointer;
+  display: inline-block;
+  position: absolute;
+  transition: background .2s, border .2s, box-shadow .2s, color .2s;
+}
+
+.form-checkbox.input-sm,
+.form-radio.input-sm,
+.form-switch.input-sm {
+  font-size: .7rem;
+  margin: 0;
+}
+
+.form-checkbox.input-lg,
+.form-radio.input-lg,
+.form-switch.input-lg {
+  font-size: .9rem;
+  margin: .3rem 0;
+}
+
+.form-switch {
+  padding-left: 2rem;
+}
+
+.form-switch .form-icon {
+  background: #bcc3ce;
+  background-clip: padding-box;
+  border-radius: .45rem;
+  height: .9rem;
+  left: 0;
+  top: .25rem;
+  width: 1.6rem;
+}
+
+.form-switch .form-icon::before {
+  background: #fff;
+  border-radius: 50%;
+  content: "";
+  display: block;
+  height: .8rem;
+  left: 0;
+  position: absolute;
+  top: 0;
+  transition: background .2s, border .2s, box-shadow .2s, color .2s, left .2s;
+  width: .8rem;
+}
+
+.form-switch input:checked+.form-icon::before {
+  left: 14px;
+}
+
+.form-switch input:active+.form-icon::before {
+  background: #f7f8f9;
+}
+
+.form-switch input:disabled+.form-icon::before,
+.form-switch input.disabled+.form-icon::before {
+  background: #fff;
+}

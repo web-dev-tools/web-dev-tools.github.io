@@ -10,7 +10,7 @@
   <meta name="robots" content="noindex">
 
   <!-- Styles -->
-  <link href='../style.css' rel="stylesheet">
+  <link href='./style.css' rel="stylesheet">
   <link href='./style-chart.css' rel="stylesheet">
 
   <!-- ChartJS -->
@@ -25,24 +25,111 @@
   </header>
   <main>
 
-    <section id="parser-input">
-      <h4>Input</h4>
-      <textarea id="input">https://web-dev-tools.github.io/</textarea>
-      <div class="divider" style="grid-row:span 2"></div>
-      <h4>Controls</h4>
-      <button class="btn" onclick="updateChart()">Parse URL</button>
-      <button class="btn" onclick="changeChartType('bar')">Share</button>
+    <section id="section-chart-input">
       <div class="form-group">
+        <h4>Input</h4>
+        <input id="chart-csv-upload" type="file" accept="csv"></input>
+
         <label class="form-switch">
-          <input type="checkbox" name="json" checked="true">
-          <i class="form-icon"></i> Convert to JSON
+          <input class="form-switch data-options" id="headerRow" type="checkbox" checked>
+          <icon class="form-icon"></icon>
+          Use First Row as Headers
+        </label>
+
+        <label class="form-switch">
+          <input class="form-switch data-options" id="multiDataset" type="checkbox">
+          <icon class="form-icon"></icon>
+          Use Each Column as Dataset
+        </label>
+
+        <label class="form-switch">
+          <input class="form-switch data-options" id="labelColumn" type="checkbox">
+          <icon class="form-icon"></icon>
+          Use First Column as Labels
         </label>
       </div>
+
+      <div class="form-group">
+        <h4>Controls</h4>
+        <label for="select-change-chart-type">Select a Chart Type</label>
+        <select id="select-change-chart-type">
+          <option value="bar">Bar Chart</option>
+          <option value="line">Line Chart</option>
+          <option value="bubble">Bubble Chart</option>
+          <option value="pie">Pie Chart</option>
+        </select>
+
+        <!-- CHART TITLE OPTIONS -->
+        <details open>
+          <summary>Chart Title</summary>
+          <label class="form-switch">
+            <input class="form-switch" id="options.plugins.title.display" type="checkbox">
+            <icon class="form-icon"></icon>
+            Display Title
+          </label>
+          <input class="form-input" id="options.plugins.title.text" placeholder="Input your title here..."
+            value=""></input>
+          <select class="form-select" id="options.plugins.title.align">
+            <option value="center">Centered</options>
+            <option value="start">Start</options>
+            <option value="end">End</options>
+          </select>
+          <select class="form-select" id="options.plugins.title.position">
+            <option value="top">Top</options>
+            <option value="left">Left</options>
+            <option value="right">Right</options>
+            <option value="bottom">Bottom</options>
+          </select>
+        </details>
+        <details>
+          <summary>Chart Subtitle</summary>
+          <label class="form-switch">
+            <input class="form-switch" id="options.plugins.subtitle.display" type="checkbox">
+            <icon class="form-icon"></icon>
+            Display Title
+          </label>
+          <input class="form-input" id="options.plugins.subtitle.text" placeholder="Input your subtitle here..."
+            value=""></input>
+          <select class="form-select" id="options.plugins.subtitle.align">
+            <option value="center">Subtitle Alignment - Centered</options>
+            <option value="start">Subtitle Alignment - Start</options>
+            <option value="end">Subtitle Alignment - End</options>
+          </select>
+          <select class="form-select" id="options.plugins.subtitle.position">
+            <option value="bottom">Subtitle Position - Bottom</options>
+            <option value="top">Subtitle Position - Top</options>
+            <option value="left">Subtitle Position - Left</options>
+            <option value="right">Subtitle Position - Right</options>
+          </select>
+        </details>
+
+        <!-- DIVIDER -->
+        <div class="divider"></div>
+
+        <h4>Datasets</h4>
+        <button id="button-insert-dataset" onclick="() => insertDataset()">Insert Dataset</button>
+        <details id="chart-dataset-1">
+          <summary>Dataset #1</summary>
+        </details>
+        <label class="form-switch">
+          <input class="form-switch" id="options.plugins.legend.display" type="checkbox" checked>
+          <icon class="form-icon"></icon>
+          Display Legend
+        </label>
+
+      </div>
+      <pre>
+        <code id="chart-code">
+          {}
+        </code>
+      </pre>
     </section>
 
-    <section id="parser-output">
-      <h4>Chart</h4>
-      <canvas id="chart"></canvas>
+    <section id="section-visual-chart">
+      <figure id="chart-figure">
+        <h4>Chart</h4>
+        <canvas id="chart"></canvas>
+      </figure>
     </section>
 
     <section id="options">
@@ -54,8 +141,10 @@
     <div class="divider"></div>
     <p>Updated 2026.01.19<br>
       Created with ❤️ by A. Dean Kelly</p>
-    <script src="chart-generator.js"></script>
+    <p>Random data provided by Faker.js</p>
   </footer>
+
+  <script src="chart-generator.js"></script>
 </body>
 
 </html>
