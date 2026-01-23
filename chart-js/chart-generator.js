@@ -48,7 +48,7 @@ const RawDataArray = [];
 const DataOptions = {
   headerRow: true,
   multiDatasets: false,
-  labelColumn: false
+  labelColumn: true
 }
 
 // Create the Chart and the Code Block
@@ -123,10 +123,19 @@ function readCsvFile(event) {
   const reader = new FileReader();
   reader.onload = function (event) {
     const content = event.target.result;
-    const FirstArray = content.split('\n');
+    const FirstArray = content.trim().split('\n');
+    const SecondArray = []
 
     for (const row of FirstArray) {
-      RawDataArray.push(row.split(','));
+      const values = row.split(',');
+
+      const convertedValues = values.map(value => {
+        const num = Number(value);
+        return Number.isNaN(num)
+          ? value
+          : num;
+      });
+      RawDataArray.push(convertedValues);
     };
 
     manageCsvData();
@@ -136,33 +145,150 @@ function readCsvFile(event) {
 
 // Manage Data from CSV
 function manageCsvData() {
-  const { headerRow, labelColumn, multiDatasets } = DataOptions;
-  const EditedArray = headerRow
-    ? RawDataArray.slice(1, -1)
-    : RawDataArray;
+  try {
+    const { headerRow, labelColumn, multiDatasets } = DataOptions;
+    const processedData = {
+      labels: [],
+      datasets: []
+    }
+    let tempLabels = [];
 
-  const headers = RawDataArray[0];
-  const DataArray = [];
-  const LabelArray = [];
-  for (const row of EditedArray) {
-    LabelArray.push(row[0]);
-    DataArray.push(row[1]);
+    const EditedArray = headerRow
+      ? RawDataArray.slice(1)
+      : RawDataArray;
+
+    if (headerRow) {
+      const headers = RawDataArray[0].slice(1);
+      processedData.labels = headers;
+    }
+
+    if (!multiDatasets) {
+      processedData.datasets.push({ data: [] });
+    }
+
+    for (let i = 0; i < EditedArray.length; i++) {
+      const datasetName = labelColumn
+        ? EditedArray[i][0]
+        : `Dataset ${i + 1}`;
+      tempLabels.push(EditedArray[i][0]);
+      const values = EditedArray[i].slice(1).map(Number);
+      console.log('Values', values, 'Multi', multiDatasets);
+
+      if (multiDatasets) {
+
+        processedData.datasets.push({
+          label: labelColumn ? '' : datasetName,
+          data: values
+        });
+      }
+      else {
+        processedData.datasets[0].data.push(values[0]);
+      }
+
+
+      // console.log(datasetName);
+    }
+    if (labelColumn) {
+      processedData.labels = tempLabels;
+    }
+
+    // }
+
+    // if (headerRow && labelColumn) {
+    //   const headers = RawDataArray[0].slice(1);
+    //   processedData.labels = headers;
+
+    //   for (let i = 1; i < RawDataArray.length; i++) {
+    //     const datasetName = RawDataArray[i][0];
+    //     const values = RawDataArray[i].slice(1).map(Number);
+
+    //     processedData.datasets.push({
+    //       label: datasetName,
+    //       data: values
+    //     });
+
+    //   }
+    // }
+    // else if (headerRow && !labelColumn) {
+    //   const datasets = [];
+
+    //   for (let i = 1; i < RawDataArray.length; i++) {
+    //     const values = RawDataArray[i].slice().map(Number);
+
+    //     datasets.push({
+    //       label: `Dataset ${i + 1}`,
+    //       data: values
+    //     });
+    //   }
+
+    //   processedData.datasets = datasets;
+    //   console.log(processedData);
+
+    // }
+    // else if (!headerRow && labelColumn) {
+    //   for (let i = 0; i < RawDataArray.length; i++) {
+    //     const values = RawDataArray[i].slice(1).map(Number);
+
+    //     processedData.datasets.push({
+    //       label: RawDataArray[i][0],
+    //       data: values
+    //     });
+    //   }
+    // }
+    // else if (!headerRow && !labelColumn) {
+    //   const values = RawDataArray[0].slice().map(Number);
+
+    //   processedData.datasets.push({
+    //     label: 'Single Dataset',
+    //     data: values
+    //   })
+    // }
+
+    ChartData.data = processedData;
+    console.log(ChartData.data);
+    console.log(ChartData);
   }
-  if (headerRow && labelColumn) {
-    const newData = [{ label: RawDataArray[0][1], data: DataArray }];
-    ChartData.data.labels = LabelArray;
-    ChartData.data.datasets = newData;
+  catch (error) {
+    console.log('Failed CSV Data');
+    console.log(error);
   }
-  if (headerRow && !labelColumn) {
-    const newData = [{ label: RawDataArray[0][1], data: DataArray }];
-    ChartData.data.labels = LabelArray;
-    ChartData.data.datasets = newData;
-  }
-  if (!headerRow && labelColumn) {
-    const newData = [{ data: DataArray }]
-    ChartData.data.datasets = newData;
-    ChartData.data.labels = LabelArray
-  }
+  // const EditedArray = headerRow
+  //   ? RawDataArray.slice(1, -1)
+  //   : RawDataArray;
+
+  // const headers = RawDataArray[0];
+  // const DataArray = [];
+  // const LabelArray = [];
+
+  // console.log(EditedArray, RawDataArray);
+
+  // if (!multiDatasets) {
+  //   ChartData.data.labels = null;
+  //   ChartData.data.datasets.slice(0, -1);
+  //   ChartData.data.datasets = [{ data: RawDataArray }];
+  //   VisualChart.update();
+  //   code.innerText = JSON.stringify(ChartData, null, 2);
+  //   return;
+  // }
+  // for (const row of EditedArray) {
+  //   LabelArray.push(row[0]);
+  //   DataArray.push(row[1]);
+  // }
+  // if (headerRow && labelColumn) {
+  //   const newData = [{ label: RawDataArray[0][1], data: DataArray }];
+  //   ChartData.data.labels = LabelArray;
+  //   ChartData.data.datasets = newData;
+  // }
+  // if (headerRow && !labelColumn) {
+  //   const newData = [{ label: RawDataArray[0][1], data: DataArray }];
+  //   ChartData.data.labels = LabelArray;
+  //   ChartData.data.datasets = newData;
+  // }
+  // if (!headerRow && labelColumn) {
+  //   const newData = [{ data: DataArray }]
+  //   ChartData.data.datasets = newData;
+  //   ChartData.data.labels = LabelArray
+  // }
 
   VisualChart.update();
   code.innerText = JSON.stringify(ChartData, null, 2);

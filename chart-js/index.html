@@ -37,15 +37,15 @@
         </label>
 
         <label class="form-switch">
-          <input class="form-switch data-options" id="multiDataset" type="checkbox">
+          <input class="form-switch data-options" id="labelColumn" type="checkbox" checked>
           <icon class="form-icon"></icon>
-          Use Each Column as Dataset
+          Use First Column as Labels
         </label>
 
         <label class="form-switch">
-          <input class="form-switch data-options" id="labelColumn" type="checkbox">
+          <input class="form-switch data-options" id="multiDatasets" type="checkbox">
           <icon class="form-icon"></icon>
-          Use First Column as Labels
+          Use Each Column as Dataset
         </label>
       </div>
 
@@ -53,8 +53,8 @@
         <h4>Controls</h4>
         <label for="select-change-chart-type">Select a Chart Type</label>
         <select id="select-change-chart-type">
-          <option value="bar">Bar Chart</option>
           <option value="line">Line Chart</option>
+          <option value="bar">Bar Chart</option>
           <option value="bubble">Bubble Chart</option>
           <option value="pie">Pie Chart</option>
         </select>
