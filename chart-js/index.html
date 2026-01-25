@@ -31,30 +31,37 @@
         <input id="chart-csv-upload" type="file" accept="csv"></input>
 
         <label class="form-switch">
-          <input class="form-switch data-options" id="headerRow" type="checkbox" checked>
+          <input class="form-switch data-options" data-variable="headerRow" type="checkbox" checked>
           <icon class="form-icon"></icon>
           Use First Row as Headers
         </label>
 
         <label class="form-switch">
-          <input class="form-switch data-options" id="labelColumn" type="checkbox" checked>
+          <input class="form-switch data-options" data-variable="labelColumn" type="checkbox" checked>
           <icon class="form-icon"></icon>
           Use First Column as Labels
         </label>
 
         <label class="form-switch">
-          <input class="form-switch data-options" id="multiDatasets" type="checkbox">
+          <input class="form-switch data-options" data-variable="multiDatasets" type="checkbox">
           <icon class="form-icon"></icon>
           Use Each Column as Dataset
         </label>
+
+        <label class="form-switch">
+          <input class="form-switch data-options" data-variable="headerKeys" type="checkbox">
+          <icon class="form-icon"></icon>
+          Use the First Row as Keys (Bubble Chart)
+        </label>
+
       </div>
 
       <div class="form-group">
         <h4>Controls</h4>
         <label for="select-change-chart-type">Select a Chart Type</label>
         <select id="select-change-chart-type">
-          <option value="line">Line Chart</option>
           <option value="bar">Bar Chart</option>
+          <option value="line">Line Chart</option>
           <option value="bubble">Bubble Chart</option>
           <option value="pie">Pie Chart</option>
         </select>
@@ -63,18 +70,79 @@
         <details open>
           <summary>Chart Title</summary>
           <label class="form-switch">
-            <input class="form-switch" id="options.plugins.title.display" type="checkbox">
+            <input class="form-switch" data-variable="options.plugins.title.display" type="checkbox">
             <icon class="form-icon"></icon>
             Display Title
           </label>
-          <input class="form-input" id="options.plugins.title.text" placeholder="Input your title here..."
+
+          <!-- AXIS OPTIONS -->
+          <!-- X-AXIS OPTIONS -->
+          <div class="form-group grid-col-3">
+            <label class="form-label">X-Axis Type
+              <label class="form-radio">
+                <input class="form-switch" name="x-axis-type" data-variable="options.scales.x.type" type="radio"
+                  value="linear" checked>
+                <i class="form-icon"></i> Linear
+              </label>
+              <label class="form-radio">
+                <input class="form-switch" name="x-axis-type" data-variable="options.scales.x.type" type="radio"
+                  value="category">
+                <i class="form-icon"></i> Category
+              </label>
+            </label>
+            <div>
+              <label class="form-switch">
+                <input class="form-switch" data-variable="options.scales.x.beginAtZero" type="checkbox" checked>
+                <i class="form-icon"></i>Zero Start
+              </label>
+              <label class="form-switch">
+                <input class="form-switch" data-variable="options.scales.x.offset" type="checkbox">
+                <i class="form-icon"></i>X-Offset
+              </label>
+              <label class="form-switch">
+                <input class="form-switch" data-variable="options.scales.x.grid.offset" type="checkbox">
+                <i class="form-icon"></i>Grid Offset
+              </label>
+            </div>
+          </div>
+
+          <!-- Y-AXIS OPTIONS -->
+          <div class="form-group grid-col-3">
+            <label class="form-label">Y-Axis Type
+              <label class="form-radio">
+                <input class="form-switch" name="y-axis-type" data-variable="options.scales.y.type" type="radio"
+                  value="linear" checked>
+                <i class="form-icon"></i> Linear
+              </label>
+              <label class="form-radio">
+                <input class="form-switch" name="y-axis-type" data-variable="options.scales.y.type" type="radio"
+                  value="category">
+                <i class="form-icon"></i> Category
+              </label>
+            </label>
+            <div>
+              <label class="form-switch">
+                <input class="form-switch" data-variable="options.scales.y.beginAtZero" type="checkbox" checked>
+                <i class="form-icon"></i>Zero Start
+              </label>
+              <label class="form-switch">
+                <input class="form-switch" data-variable="options.scales.y.offset" type="checkbox">
+                <i class="form-icon"></i>Y-Offset
+              </label>
+              <label class="form-switch">
+                <input class="form-switch" data-variable="options.scales.y.grid.offset" type="checkbox">
+                <i class="form-icon"></i>Grid Offset
+              </label>
+            </div>
+          </div>
+          <input class="form-input" data-variable="options.plugins.title.text" placeholder="Input your title here..."
             value=""></input>
-          <select class="form-select" id="options.plugins.title.align">
+          <select class="form-select" data-variable="options.plugins.title.align">
             <option value="center">Centered</options>
             <option value="start">Start</options>
             <option value="end">End</options>
           </select>
-          <select class="form-select" id="options.plugins.title.position">
+          <select class="form-select" data-variable="options.plugins.title.position">
             <option value="top">Top</options>
             <option value="left">Left</options>
             <option value="right">Right</options>
@@ -84,18 +152,18 @@
         <details>
           <summary>Chart Subtitle</summary>
           <label class="form-switch">
-            <input class="form-switch" id="options.plugins.subtitle.display" type="checkbox">
+            <input class="form-switch" data-variable="options.plugins.subtitle.display" type="checkbox">
             <icon class="form-icon"></icon>
             Display Title
           </label>
-          <input class="form-input" id="options.plugins.subtitle.text" placeholder="Input your subtitle here..."
-            value=""></input>
-          <select class="form-select" id="options.plugins.subtitle.align">
+          <input class="form-input" data-variable="options.plugins.subtitle.text"
+            placeholder="Input your subtitle here..." value=""></input>
+          <select class="form-select" data-variable="options.plugins.subtitle.align">
             <option value="center">Subtitle Alignment - Centered</options>
             <option value="start">Subtitle Alignment - Start</options>
             <option value="end">Subtitle Alignment - End</options>
           </select>
-          <select class="form-select" id="options.plugins.subtitle.position">
+          <select class="form-select" data-variable="options.plugins.subtitle.position">
             <option value="bottom">Subtitle Position - Bottom</options>
             <option value="top">Subtitle Position - Top</options>
             <option value="left">Subtitle Position - Left</options>
@@ -112,7 +180,7 @@
           <summary>Dataset #1</summary>
         </details>
         <label class="form-switch">
-          <input class="form-switch" id="options.plugins.legend.display" type="checkbox" checked>
+          <input class="form-switch" data-variable="options.plugins.legend.display" type="checkbox" checked>
           <icon class="form-icon"></icon>
           Display Legend
         </label>
@@ -120,7 +188,6 @@
       </div>
       <pre>
         <code id="chart-code">
-          {}
         </code>
       </pre>
     </section>

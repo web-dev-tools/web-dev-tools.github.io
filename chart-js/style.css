@@ -189,3 +189,139 @@ details {
 .form-switch input.disabled+.form-icon::before {
   background: #fff;
 }
+
+.form-radio .form-icon {
+  border-radius: 50%;
+}
+
+.form-radio input:checked+.form-icon::before {
+  background: #fff;
+  border-radius: 50%;
+  content: "";
+  height: 6px;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 6px;
+}
+
+form-checkbox .form-icon,
+.form-radio .form-icon {
+  background: #fff;
+  height: .8rem;
+  left: 0;
+  top: .3rem;
+  width: .8rem;
+}
+
+.form-checkbox input:active+.form-icon,
+.form-radio input:active+.form-icon {
+  background: #eef0f3;
+}
+
+.form-checkbox .form-icon {
+  border-radius: .1rem;
+}
+
+.form-checkbox input:checked+.form-icon::before {
+  background-clip: padding-box;
+  border: .1rem solid #fff;
+  border-left-width: 0;
+  border-top-width: 0;
+  content: "";
+  height: 9px;
+  left: 50%;
+  margin-left: -3px;
+  margin-top: -6px;
+  position: absolute;
+  top: 50%;
+  transform: rotate(45deg);
+  width: 6px;
+}
+
+.form-checkbox input:indeterminate+.form-icon {
+  background: #5755d9;
+  border-color: #5755d9;
+}
+
+.form-checkbox input:indeterminate+.form-icon::before {
+  background: #fff;
+  content: "";
+  height: 2px;
+  left: 50%;
+  margin-left: -5px;
+  margin-top: -1px;
+  position: absolute;
+  top: 50%;
+  width: 10px;
+}
+
+.form-radio .form-icon {
+  border-radius: 50%;
+}
+
+.form-radio input:checked+.form-icon::before {
+  background: #fff;
+  border-radius: 50%;
+  content: "";
+  height: 6px;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 6px;
+}
+
+.form-switch {
+  padding-left: 2rem;
+}
+
+.form-switch .form-icon {
+  background: #bcc3ce;
+  background-clip: padding-box;
+  border-radius: .45rem;
+  height: .9rem;
+  left: 0;
+  top: .25rem;
+  width: 1.6rem;
+}
+
+.form-switch .form-icon::before {
+  background: #fff;
+  border-radius: 50%;
+  content: "";
+  display: block;
+  height: .8rem;
+  left: 0;
+  position: absolute;
+  top: 0;
+  transition: background .2s, border .2s, box-shadow .2s, color .2s, left .2s;
+  width: .8rem;
+}
+
+.form-switch input:checked+.form-icon::before {
+  left: 14px;
+}
+
+.form-switch input:active+.form-icon::before {
+  background: #f7f8f9;
+}
+
+.grid-col-2,
+.grid-col-3,
+.grid-col-4 {
+  display: grid;
+}
+
+.grid-col-2 {
+  grid-template-columns: 1fr 1fr
+}
+
+.grid-col-3 {
+  grid-template-columns: 1fr 1fr 1fr
+}
+
+.grid-col-4 {
+  grid-template-columns: 1fr 1fr 1fr 1fr
+}

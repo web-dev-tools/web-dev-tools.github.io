@@ -1,5 +1,3 @@
-// const { faker } = window;
-
 const ctx = document.getElementById('chart');
 const code = document.getElementById('chart-code');
 
@@ -10,11 +8,11 @@ const FruitColor = '#45000';
 
 // Initial Chart Data
 const ChartData = {
-  type: 'line',
+  type: 'bar',
   data: {
     labels: Fruits,
     datasets: [{
-      label: 'Ad',
+      label: 'Fruit',
       data: FruitData,
       backgroundColor: FruitColor,
       borderColor: FruitColor,
@@ -24,14 +22,23 @@ const ChartData = {
   options: {
     responsive: true,
     scales: {
+      x: {
+        // beginAtZero: true,
+        // offset: false,
+        // type: 'linear',
+        // grid: {
+        //   offset: false,
+        // }
+      },
       y: {
         beginAtZero: true
-      }
+      },
     },
     plugins: {
       title: {
         display: false,
         align: 'center',
+        position: 'top',
         text: '',
       },
       legend: {
@@ -47,6 +54,7 @@ const ChartData = {
 const RawDataArray = [];
 const DataOptions = {
   headerRow: true,
+  headerKeys: false,
   multiDatasets: false,
   labelColumn: true
 }
@@ -60,6 +68,7 @@ function changeChartType(event) {
   VisualChart.destroy();
   ChartData.type = event.target.value
   VisualChart = new Chart(ctx, ChartData);
+  updateVariables();
 }
 
 // Dynamically Change/Update Any Option
@@ -71,22 +80,35 @@ function changeChartOption(event) {
     ? event.target.checked
     : event.target.value;
 
-  const option = event.target.id;
+  const option = event.target.dataset.variable;
 
+  // AI Magic
   const path = [...option.split('.')]
   path.reduce((obj, key, i) => {
-    if (i === path.length - 1) {
+    const isLast = i === path.length - 1;
+    const nextKey = path[i + 1];
+
+    if (isLast) {
       obj[key] = value;
-    } else {
-      obj[key] ??= {};
-      return obj[key];
+      return;
     }
+
+    // If the current slot doesn't exist, create it
+    if (obj[key] == null) {
+      // If the next key is a number, we need an array
+      obj[key] = typeof nextKey === 'number' ? [] : {};
+    }
+
+    return obj[key];
   }, ChartData);
+  console.log(path);
 
   // Update the Chart and the Code Block
   VisualChart.update();
+  updateVariables();
   code.innerText = JSON.stringify(ChartData, null, 2);
 }
+
 // Dynamically Change/Update Any Option
 function changeDataOption(event) {
 
@@ -97,7 +119,7 @@ function changeDataOption(event) {
     ? event.target.checked
     : event.target.value;
 
-  const option = event.target.id;
+  const option = event.target.dataset.variable;
 
   const path = [...option.split('.')]
   path.reduce((obj, key, i) => {
@@ -115,10 +137,12 @@ function changeDataOption(event) {
     return;
   }
   VisualChart.update();
+  updateVariables();
   code.innerText = JSON.stringify(ChartData, null, 2);
 }
 
 function readCsvFile(event) {
+  delete ChartData.data;
   const file = event.target.files[0];
   const reader = new FileReader();
   reader.onload = function (event) {
@@ -139,6 +163,7 @@ function readCsvFile(event) {
     };
 
     manageCsvData();
+    updateVariables();
   };
   reader.readAsText(file);
 }
@@ -146,24 +171,32 @@ function readCsvFile(event) {
 // Manage Data from CSV
 function manageCsvData() {
   try {
-    const { headerRow, labelColumn, multiDatasets } = DataOptions;
+    // Import the Data Options & set the initial empty data object
+    const { headerRow, labelColumn, multiDatasets, headerKeys } = DataOptions;
     const processedData = {
       labels: [],
       datasets: []
     }
     let tempLabels = [];
 
+    // Manipulate the data based on the Data Options
+    // Slice an EditedArray to manage the headerRow option
     const EditedArray = headerRow
       ? RawDataArray.slice(1)
       : RawDataArray;
 
-    if (headerRow) {
+    if (headerRow && !headerKeys) {
       const headers = RawDataArray[0].slice(1);
       processedData.labels = headers;
     }
 
     if (!multiDatasets) {
-      processedData.datasets.push({ data: [] });
+      if (headerRow) {
+        processedData.datasets.push({ label: RawDataArray[0][1], data: [] });
+      }
+      else if (!headerKeys) {
+        processedData.datasets.push({ data: [] });
+      }
     }
 
     for (let i = 0; i < EditedArray.length; i++) {
@@ -171,6 +204,10 @@ function manageCsvData() {
         ? EditedArray[i][0]
         : `Dataset ${i + 1}`;
       tempLabels.push(EditedArray[i][0]);
+
+
+
+      // TODO FIX SLICE FOR LABEL COLUMNS
       const values = EditedArray[i].slice(1).map(Number);
       console.log('Values', values, 'Multi', multiDatasets);
 
@@ -181,72 +218,28 @@ function manageCsvData() {
           data: values
         });
       }
+      else if (headerKeys) {
+        let values = {};
+        let newLabel = '';
+        for (let j = 1; j < EditedArray[i].length; j++) {
+          values[RawDataArray[0][j]] = EditedArray[i][j];
+          newLabel = EditedArray[i][0];
+        }
+        console.log(values, 'Values;');
+        processedData.datasets[0].data.push(values);
+
+        // const values = {[EditedArray[0].slice(1)]: EditedArray[i].slice(1).map(Number)};
+      }
       else {
         processedData.datasets[0].data.push(values[0]);
       }
-
-
-      // console.log(datasetName);
     }
-    if (labelColumn) {
+
+    if (labelColumn && !headerKeys) {
       processedData.labels = tempLabels;
     }
 
-    // }
-
-    // if (headerRow && labelColumn) {
-    //   const headers = RawDataArray[0].slice(1);
-    //   processedData.labels = headers;
-
-    //   for (let i = 1; i < RawDataArray.length; i++) {
-    //     const datasetName = RawDataArray[i][0];
-    //     const values = RawDataArray[i].slice(1).map(Number);
-
-    //     processedData.datasets.push({
-    //       label: datasetName,
-    //       data: values
-    //     });
-
-    //   }
-    // }
-    // else if (headerRow && !labelColumn) {
-    //   const datasets = [];
-
-    //   for (let i = 1; i < RawDataArray.length; i++) {
-    //     const values = RawDataArray[i].slice().map(Number);
-
-    //     datasets.push({
-    //       label: `Dataset ${i + 1}`,
-    //       data: values
-    //     });
-    //   }
-
-    //   processedData.datasets = datasets;
-    //   console.log(processedData);
-
-    // }
-    // else if (!headerRow && labelColumn) {
-    //   for (let i = 0; i < RawDataArray.length; i++) {
-    //     const values = RawDataArray[i].slice(1).map(Number);
-
-    //     processedData.datasets.push({
-    //       label: RawDataArray[i][0],
-    //       data: values
-    //     });
-    //   }
-    // }
-    // else if (!headerRow && !labelColumn) {
-    //   const values = RawDataArray[0].slice().map(Number);
-
-    //   processedData.datasets.push({
-    //     label: 'Single Dataset',
-    //     data: values
-    //   })
-    // }
-
     ChartData.data = processedData;
-    console.log(ChartData.data);
-    console.log(ChartData);
   }
   catch (error) {
     console.log('Failed CSV Data');
@@ -297,13 +290,108 @@ function manageCsvData() {
 // Dynamically Add New DataSet
 function insertDataSet() {
   console.log('Insert Dataset')
-  const newDatasetDetails = document.createElement('details');
-  const newDatasetSummary = document.createElement('summary');
-  newDatasetSummary.innerText = 'New Dataset!'
-  newDatasetDetails.appendChild(newDatasetSummary);
+  for (const [index, dataset] of ChartData.data.datasets.entries()) {
+    const containerDiv = document.createElement('div');
+    const dataInput = document.createElement('input');
+    const labelInput = document.createElement('input');
+    const backgroundColorInput = document.createElement('input');
+    const borderColorInput = document.createElement('input');
+    const borderWidthInput = document.createElement('input');
 
-  const lastDataset = document.querySelector('#chart-dataset-1');
-  lastDataset.insertAdjacentElement('afterend', newDatasetDetails);
+    dataInput.value = dataset.data.toString();
+    labelInput.value = dataset.label.toString();
+    backgroundColorInput.value = dataset.backgroundColor.toString();
+    borderColorInput.value = dataset.borderColor.toString();
+    borderWidthInput.value = dataset.borderWidth
+      ? dataset.borderWidth.toString()
+      : '#000';
+
+    containerDiv.classList = 'chart-dataset';
+    dataInput.type = 'text';
+    labelInput.type = 'text';
+    backgroundColorInput.type = 'color';
+    borderColorInput.type = 'color';
+    borderWidthInput.type = 'number';
+
+    dataInput.dataset.variable = `data.datasets.${index}.data`;
+    dataInput.addEventListener('input', (event) => changeChartOption(event));
+
+    labelInput.dataset.variable = `data.datasets.${index}.label`;
+    labelInput.addEventListener('input', (event) => changeChartOption(event));
+
+    backgroundColorInput.dataset.variable = `data.datasets.${index}.backgroundColor`;
+    backgroundColorInput.addEventListener('input', (event) => changeChartOption(event));
+
+    borderColorInput.dataset.variable = `data.datasets.${index}.borderColor`;
+    borderColorInput.addEventListener('input', (event) => changeChartOption(event));
+
+    borderWidthInput.dataset.variable = `data.datasets.${index}.borderWidth`;
+    borderWidthInput.addEventListener('input', (event) => changeChartOption(event));
+
+
+    containerDiv.appendChild(labelInput);
+    containerDiv.appendChild(dataInput);
+    containerDiv.appendChild(backgroundColorInput);
+    containerDiv.appendChild(borderColorInput);
+    containerDiv.appendChild(borderWidthInput);
+
+
+    const lastDataset = document.querySelector('#chart-dataset-1');
+    lastDataset.insertAdjacentElement('afterend', containerDiv);
+
+    console.log(dataset);
+  }
+  // const newDatasetDetails = document.createElement('details');
+  // const newDatasetSummary = document.createElement('summary');
+  // newDatasetSummary.innerText = 'New Dataset!'
+  // newDatasetDetails.appendChild(newDatasetSummary);
+
+}
+
+function updateVariables() {
+  const chartInputs = document.querySelectorAll('.form-select, .form-input, input.form-switch');
+  for (const element of chartInputs) {
+    const isCheckbox = element.type === 'checkbox';
+    const isRadio = element.type === 'radio';
+
+    const option = element.dataset.variable;
+    // console.log(option);
+
+    // AI Magic
+    const path = [...option.split('.')]
+    path.reduce((obj, key, i) => {
+      const isLast = i === path.length - 1;
+      const nextKey = path[i + 1];
+
+      if (isLast) {
+        // obj[key] = value;
+        if (isCheckbox) {
+          element.checked = obj[key];
+        }
+        else if (isRadio && element.value == obj[key]) {
+          element.checked = true;
+        }
+        else if (isRadio && element.value !== obj[key]) {
+          element.checked = false;
+        }
+        else {
+          element.value = obj[key];
+        }
+        return;
+      }
+
+      // If the current slot doesn't exist, create it
+      if (obj[key] == null) {
+        // If the next key is a number, we need an array
+        obj[key] = typeof nextKey === 'number' ? [] : {};
+      }
+
+      return obj[key];
+    }, ChartData);
+
+    // console.log(element);
+  }
+
 }
 
 // Bind Event Handlers
