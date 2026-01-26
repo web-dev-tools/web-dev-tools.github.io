@@ -322,6 +322,10 @@ form-checkbox .form-icon,
   grid-template-columns: 1fr 1fr 1fr
 }
 
+.grid-col-3-span {
+  grid-column: span 3;
+}
+
 .grid-col-4 {
   grid-template-columns: 1fr 1fr 1fr 1fr
 }

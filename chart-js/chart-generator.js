@@ -1,6 +1,8 @@
 const ctx = document.getElementById('chart');
 const code = document.getElementById('chart-code');
 
+const datasetContainer = document.getElementById('dataset-container');
+
 const Fruits = ['apple', 'orange', 'pear', 'grape', 'dragon fruit'];
 const FruitData = [10, 14, 3, 8, 9];
 const FruitAdjective = 'Votes for Most Delicious'
@@ -23,12 +25,7 @@ const ChartData = {
     responsive: true,
     scales: {
       x: {
-        // beginAtZero: true,
-        // offset: false,
-        // type: 'linear',
-        // grid: {
-        //   offset: false,
-        // }
+        type: 'category',
       },
       y: {
         beginAtZero: true
@@ -149,7 +146,7 @@ function readCsvFile(event) {
     const content = event.target.result;
     const FirstArray = content.trim().split('\n');
     const SecondArray = []
-
+    RawDataArray.splice(0, RawDataArray.length)
     for (const row of FirstArray) {
       const values = row.split(',');
 
@@ -290,6 +287,10 @@ function manageCsvData() {
 // Dynamically Add New DataSet
 function insertDataSet() {
   console.log('Insert Dataset')
+
+  datasetContainer.innerHTML = '';
+  console.log(datasetContainer);
+
   for (const [index, dataset] of ChartData.data.datasets.entries()) {
     const containerDiv = document.createElement('div');
     const dataInput = document.createElement('input');
@@ -336,8 +337,7 @@ function insertDataSet() {
     containerDiv.appendChild(borderWidthInput);
 
 
-    const lastDataset = document.querySelector('#chart-dataset-1');
-    lastDataset.insertAdjacentElement('afterend', containerDiv);
+    datasetContainer.insertAdjacentElement('beforeend', containerDiv);
 
     console.log(dataset);
   }
