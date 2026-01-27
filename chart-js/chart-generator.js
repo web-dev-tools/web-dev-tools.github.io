@@ -30,6 +30,9 @@ const ChartData = {
       y: {
         beginAtZero: true
       },
+      y2: {
+        display: false
+      }
     },
     plugins: {
       title: {
@@ -42,6 +45,12 @@ const ChartData = {
         display: true,
         position: 'top',
         align: 'center'
+      },
+      subtitle: {
+        display: false,
+        align: 'center',
+        position: 'bottom',
+        text: ''
       }
     }
   }
@@ -58,7 +67,7 @@ const DataOptions = {
 
 // Create the Chart and the Code Block
 let VisualChart = new Chart(ctx, ChartData);
-code.innerText = JSON.stringify(ChartData, null, 2);
+code.value = JSON.stringify(ChartData, undefined, 2);
 
 // Update the Chart Type
 function changeChartType(event) {
@@ -103,7 +112,7 @@ function changeChartOption(event) {
   // Update the Chart and the Code Block
   VisualChart.update();
   updateVariables();
-  code.innerText = JSON.stringify(ChartData, null, 2);
+  code.value = JSON.stringify(ChartData, undefined, 2);
 }
 
 // Dynamically Change/Update Any Option
@@ -135,7 +144,7 @@ function changeDataOption(event) {
   }
   VisualChart.update();
   updateVariables();
-  code.innerText = JSON.stringify(ChartData, null, 2);
+  code.value = JSON.stringify(ChartData, undefined, 2);
 }
 
 function readCsvFile(event) {
@@ -202,8 +211,6 @@ function manageCsvData() {
         : `Dataset ${i + 1}`;
       tempLabels.push(EditedArray[i][0]);
 
-
-
       // TODO FIX SLICE FOR LABEL COLUMNS
       const values = EditedArray[i].slice(1).map(Number);
       console.log('Values', values, 'Multi', multiDatasets);
@@ -217,15 +224,12 @@ function manageCsvData() {
       }
       else if (headerKeys) {
         let values = {};
-        let newLabel = '';
         for (let j = 1; j < EditedArray[i].length; j++) {
           values[RawDataArray[0][j]] = EditedArray[i][j];
           newLabel = EditedArray[i][0];
         }
         console.log(values, 'Values;');
         processedData.datasets[0].data.push(values);
-
-        // const values = {[EditedArray[0].slice(1)]: EditedArray[i].slice(1).map(Number)};
       }
       else {
         processedData.datasets[0].data.push(values[0]);
@@ -242,46 +246,9 @@ function manageCsvData() {
     console.log('Failed CSV Data');
     console.log(error);
   }
-  // const EditedArray = headerRow
-  //   ? RawDataArray.slice(1, -1)
-  //   : RawDataArray;
-
-  // const headers = RawDataArray[0];
-  // const DataArray = [];
-  // const LabelArray = [];
-
-  // console.log(EditedArray, RawDataArray);
-
-  // if (!multiDatasets) {
-  //   ChartData.data.labels = null;
-  //   ChartData.data.datasets.slice(0, -1);
-  //   ChartData.data.datasets = [{ data: RawDataArray }];
-  //   VisualChart.update();
-  //   code.innerText = JSON.stringify(ChartData, null, 2);
-  //   return;
-  // }
-  // for (const row of EditedArray) {
-  //   LabelArray.push(row[0]);
-  //   DataArray.push(row[1]);
-  // }
-  // if (headerRow && labelColumn) {
-  //   const newData = [{ label: RawDataArray[0][1], data: DataArray }];
-  //   ChartData.data.labels = LabelArray;
-  //   ChartData.data.datasets = newData;
-  // }
-  // if (headerRow && !labelColumn) {
-  //   const newData = [{ label: RawDataArray[0][1], data: DataArray }];
-  //   ChartData.data.labels = LabelArray;
-  //   ChartData.data.datasets = newData;
-  // }
-  // if (!headerRow && labelColumn) {
-  //   const newData = [{ data: DataArray }]
-  //   ChartData.data.datasets = newData;
-  //   ChartData.data.labels = LabelArray
-  // }
 
   VisualChart.update();
-  code.innerText = JSON.stringify(ChartData, null, 2);
+  code.value = JSON.stringify(ChartData, undefined, 2);
 }
 
 // Dynamically Add New DataSet
@@ -343,7 +310,7 @@ function insertDataSet() {
   }
   // const newDatasetDetails = document.createElement('details');
   // const newDatasetSummary = document.createElement('summary');
-  // newDatasetSummary.innerText = 'New Dataset!'
+  // newDatasetSummary.value = 'New Dataset!'
   // newDatasetDetails.appendChild(newDatasetSummary);
 
 }
@@ -391,7 +358,33 @@ function updateVariables() {
 
     // console.log(element);
   }
+}
 
+function updateCode() {
+  try {
+    const UpdatedData = JSON.parse(code.value);
+    ChartData.data = UpdatedData.data;
+    ChartData.options = UpdatedData.options;
+
+    VisualChart.update();
+    updateVariables();
+  }
+  catch (error) {
+    code.value = JSON.stringify(ChartData, undefined, 2);
+    console.log(error);
+  }
+  console.log('Debounce!');
+}
+
+// Debounce Update 
+function debounce(callback, delay) {
+  let timer
+  return function () {
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      callback();
+    }, delay)
+  }
 }
 
 // Bind Event Handlers
@@ -406,3 +399,5 @@ const dataInputs = document.querySelectorAll('.data-options');
 for (const element of dataInputs) {
   element.addEventListener('change', (event) => changeDataOption(event));
 }
+
+code.addEventListener('change', debounce(updateCode, 500));
