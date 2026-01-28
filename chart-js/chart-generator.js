@@ -6,7 +6,7 @@ const datasetContainer = document.getElementById('dataset-container');
 const Fruits = ['apple', 'orange', 'pear', 'grape', 'dragon fruit'];
 const FruitData = [10, 14, 3, 8, 9];
 const FruitAdjective = 'Votes for Most Delicious'
-const FruitColor = '#45000';
+const FruitColor = '#880000';
 
 // Initial Chart Data
 const ChartData = {
@@ -16,8 +16,6 @@ const ChartData = {
     datasets: [{
       label: 'Fruit',
       data: FruitData,
-      backgroundColor: FruitColor,
-      borderColor: FruitColor,
       borderWidth: 2
     }]
   },
