@@ -57,10 +57,10 @@ const ChartData = {
 // Raw Data from Uploaded CSV
 const RawDataArray = [];
 const DataOptions = {
-  headerRow: true,
+  headerRow: false,
   headerKeys: false,
   multiDatasets: false,
-  labelColumn: true
+  labelColumn: false
 }
 
 // Create the Chart and the Code Block
@@ -166,10 +166,27 @@ function readCsvFile(event) {
       RawDataArray.push(convertedValues);
     };
 
+    setInitialVariables();
     manageCsvData();
     updateVariables();
   };
   reader.readAsText(file);
+}
+
+// Read and Set the Data Settings
+function setInitialVariables() {
+  if (typeof RawDataArray[1][0] !== 'number') {
+    DataOptions.labelColumn = true;
+  }
+  else {
+    ChartData.options.scales.x.type = 'linear';
+  }
+  if (typeof RawDataArray[0][1] !== 'number') {
+    DataOptions.headerRow = true;
+  }
+  if (RawDataArray[0].length >= 3) {
+    DataOptions.multiDatasets = true;
+  }
 }
 
 // Manage Data from CSV
@@ -313,6 +330,7 @@ function insertDataSet() {
 
 }
 
+// Update all elements to reflect the Chart Options
 function updateVariables() {
   const chartInputs = document.querySelectorAll('.form-select, .form-input, input.form-switch');
   for (const element of chartInputs) {
@@ -356,6 +374,20 @@ function updateVariables() {
 
     // console.log(element);
   }
+}
+
+function updateDataOptions() {
+  const dataInputs = document.querySelectorAll('.data-options');
+  for (let i = 0; i < dataInputs.length; i++) {
+    const option = dataInputs[i].dataset.variable;
+
+    if (option in DataOptions) {
+      dataInputs[i].checked = DataOptions[option];
+      console.log(DataOptions[option], option, dataInputs[i])
+    }
+  }
+
+  updateDataOptions();
 }
 
 function updateCode() {
