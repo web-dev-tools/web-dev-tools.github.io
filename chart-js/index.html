@@ -56,6 +56,7 @@
 
       </div>
 
+      <!-- CHART CONTROLS -->
       <div class="form-group">
         <h4>Controls</h4>
         <label for="select-change-chart-type">Select a Chart Type</label>
@@ -67,11 +68,7 @@
           <option value="doughnut">Doughnut Chart</option>
         </select>
 
-        <!-- CHART TITLE OPTIONS -->
-
-
         <!-- AXIS OPTIONS -->
-
         <!-- X-AXIS OPTIONS -->
         <details open>
           <summary>X-Axis Options</summary>
@@ -272,6 +269,30 @@
             </select>
           </div>
         </details>
+
+        <details>
+          <summary>Chart Legend</summary>
+          <div class="form-group">
+            <label class="form-switch">
+              <input class="form-switch" data-variable="options.plugins.legend.display" type="checkbox" checked>
+              <icon class="form-icon"></icon>
+              Display Legend
+            </label>
+            <select class="form-select" data-variable="options.plugins.legend.align">
+              <option value="center">Legend Alignment - Centered</options>
+              <option value="start">Legend Alignment - Start</options>
+              <option value="end">Legend Alignment - End</options>
+            </select>
+            <select class="form-select" data-variable="options.plugins.legend.position">
+              <option value="top">Legend Position - Top</options>
+              <option value="left">Legend Position - Left</options>
+              <option value="right">Legend Position - Right</options>
+              <option value="bottom">Legend Position - Bottom</options>
+            </select>
+          </div>
+        </details>
+
+        <!-- CHART SUBTITLE -->
         <details>
           <summary>Chart Subtitle</summary>
           <div class="form-group">
@@ -298,20 +319,14 @@
       </div>
       </details>
 
-
-      <!-- DIVIDER -->
-      <div class="divider"></div>
-
-      <h4>Datasets</h4>
-      <button id="button-insert-dataset" onclick="() => insertDataset()">Insert Dataset</button>
-      <details id="dataset-container">
-        <summary>Dataset #1</summary>
-      </details>
-      <label class="form-switch">
-        <input class="form-switch" data-variable="options.plugins.legend.display" type="checkbox" checked>
-        <icon class="form-icon"></icon>
-        Display Legend
-      </label>
+      <!-- DATASETS -->
+      <div class="form-group">
+        <h4>Datasets</h4>
+        <button id="button-insert-dataset" onclick="() => insertDataset()">Insert Dataset</button>
+        <details id="dataset-container">
+          <summary>Dataset #1</summary>
+        </details>
+      </div>
       </div>
     </section>
 
