@@ -4,7 +4,8 @@ import { fetchFile, toBlobURL } from '@ffmpeg/util';
 import JSZip from 'jszip';
 
 const resolutions = [320, 480, 640, 720, 1080, 1280, 1920]
-const durations = ['Defaut', 15, 30, 45, 60, 90]
+const durations = ['Default', 15, 30, 45, 60, 90]
+const framerate = ['Default', 23.976, 24, 25, 29.97, 50, 59.94]
 
 export default function VideoResizer() {
     const [loaded, setLoaded] = useState(false);
@@ -17,6 +18,7 @@ export default function VideoResizer() {
 
     // FFMPEG Input Flag Variables
     const [bitrateValue, setBitrateValue] = useState(2000);
+    const [frameRateValue, setFrameRateValue] = useState(0);
     const [widthIndexValue, setWidthIndexValue] = useState(5);
     const [durationIndexValue, setDurationIndexValue] = useState(0);
     const bitrateRef = useRef(null);
@@ -83,6 +85,10 @@ export default function VideoResizer() {
       setBitrateValue(event.target.value);
     }
 
+    const handleFrameRateIndexChange = (event) => {
+      setFrameRateValue(event.target.value);
+    }
+
     const handleResolutionIndexChange = (event) => {
       setWidthIndexValue(event.target.value);
     };
@@ -103,11 +109,14 @@ export default function VideoResizer() {
       for (const videoFile of videoFiles) {
         const inputName = videoFile.name;
         const fileResolution = resolutions[widthIndexValue];
+        const fileFrameRate = (frameRateValue === 'Default') ? '' : framerate[frameRateValue];
+        console.log(fileFrameRate);
 
         const outputName = 'output.'+ fileResolution + 'px.' + bitrateValue + 'kbps.' + videoFile.name;
 
         const ffmpegFlags = [
           '-i', inputName,
+          '-r', `${fileFrameRate}`,
           '-vf', `scale=${fileResolution}:-1`,
           '-b', `${bitrateValue * 1000}`,
           outputName
@@ -195,7 +204,11 @@ export default function VideoResizer() {
           <span className='video_settings_section'>
             <span className='video_setting'>
               <h3>Bitrate: {bitrateValue}kbps</h3>
-              <input className='form-range' type="range" min="250" max="4000" step="250" value={bitrateValue} onChange={handleBitrateValueChange} style={{ width: '50%' }} />
+              <input className='form-range' type="range" min="250" max="20000" step="250" value={bitrateValue} onChange={handleBitrateValueChange} style={{ width: '50%' }} />
+            </span>
+            <span className='video_setting'>
+              <h3>Frame Rate: {framerate[frameRateValue]}</h3>
+              <input className='form-range' type="range" min="0" max={framerate.length - 1} step="1" value={frameRateValue} onChange={handleFrameRateIndexChange} style={{ width: '50%' }} />
             </span>
             <span className='video_setting'>
               <h3>Width: {resolutions[widthIndexValue]}px</h3>
