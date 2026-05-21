@@ -145,13 +145,15 @@ function changeDataOption(event) {
   code.value = JSON.stringify(ChartData, undefined, 2);
 }
 
+// Read the Uploaded CSV File
+// Convert the File Into an Array
 function readCsvFile(event) {
   delete ChartData.data;
   const file = event.target.files[0];
   const reader = new FileReader();
   reader.onload = function (event) {
     const content = event.target.result;
-    const FirstArray = content.trim().split('\n');
+    const FirstArray = content.trim().split((/\r?\n/));
     const SecondArray = []
     RawDataArray.splice(0, RawDataArray.length)
     for (const row of FirstArray) {
@@ -189,6 +191,40 @@ function setInitialVariables() {
   }
 }
 
+// TODO: RENAME
+// Convert the Raw Data Into Bubble Chart Compatible Data
+function createBubbleChartData() {
+  console.log('Create Bubble Chart Function');
+
+  const processedData = {
+    labels: [],
+    datasets: []
+  }
+
+  const EditedArray = RawDataArray.slice(1)
+
+  try {
+  for (let i = 0; i < EditedArray.length; i++) {
+    let values = {};
+    for (let j = 1; j < EditedArray[i].length; j++) {
+      values[RawDataArray[0][j]] = EditedArray[i][j];
+    }
+    processedData.datasets.push({ data: [] });
+    processedData.datasets[i].data.push(values);
+    processedData.datasets[i].label = EditedArray[i][0]
+    console.log(processedData);
+  }
+    ChartData.data = processedData;
+  }
+  catch (error) {
+    console.log('Failed CSV Data');
+    console.log(error);
+  }
+
+  VisualChart.update();
+  code.value = JSON.stringify(ChartData, undefined, 2);
+}
+
 // Manage Data from CSV
 function manageCsvData() {
   try {
@@ -206,6 +242,10 @@ function manageCsvData() {
       ? RawDataArray.slice(1)
       : RawDataArray;
 
+    if (headerKeys) {
+      createBubbleChartData();
+      return;
+    }
     if (headerRow && !headerKeys) {
       const headers = RawDataArray[0].slice(1);
       processedData.labels = headers;
@@ -238,10 +278,12 @@ function manageCsvData() {
         });
       }
       else if (headerKeys) {
+        console.log("Bubble Chart")
         let values = {};
         for (let j = 1; j < EditedArray[i].length; j++) {
           values[RawDataArray[0][j]] = EditedArray[i][j];
           newLabel = EditedArray[i][0];
+          console.log(RawDataArray[0][j])
         }
         console.log(values, 'Values;');
         processedData.datasets[0].data.push(values);
