@@ -225,6 +225,73 @@ function createBubbleChartData() {
   code.value = JSON.stringify(ChartData, undefined, 2);
 }
 
+function useFirstRowAsKeys() {
+  console.log('Use First Row As Keys');
+
+  const processedData = {
+    labels: [],
+    datasets: []
+  }
+
+  const EditedArray = RawDataArray.slice(1)
+
+  try {
+  for (let i = 0; i < EditedArray.length; i++) {
+    let values = {};
+    for (let j = 1; j < EditedArray[i].length; j++) {
+      values[RawDataArray[0][j]] = EditedArray[i][j];
+    }
+    processedData.datasets.push({ data: [] });
+    processedData.datasets[i].data.push(values);
+    processedData.datasets[i].label = EditedArray[i][0]
+    console.log(processedData);
+  }
+    ChartData.data = processedData;
+  }
+  catch (error) {
+    console.log('Failed CSV Data');
+    console.log(error);
+  }
+
+  VisualChart.update();
+  code.value = JSON.stringify(ChartData, undefined, 2);
+}
+
+// 
+function useFirstRowAsDatasets() {
+  console.log('Use First Row As Datasets');
+
+  const processedData = {
+    labels: [],
+    datasets: [],
+  }
+
+  const EditedArray = RawDataArray.slice(1);
+
+  for (let j = 1; j < EditedArray[0].length; j++) {
+    processedData.datasets.push({ data: [] });
+  }
+
+  try {
+    for (let i = 0; i < EditedArray.length; i++) {
+      processedData.labels.push(EditedArray[i][0]);
+      for (let j = 1; j < EditedArray[i].length; j++) {
+        const datasetIndex = j - 1;
+        processedData.datasets[datasetIndex].data.push(EditedArray[i][j]);
+      }
+    }
+
+    ChartData.data = processedData;
+  }
+  catch (error) {
+    console.log('Failed to Update CSV Data');
+    console.log(error);   
+  }
+
+  VisualChart.update();
+  code.value = JSON.stringify(ChartData, undefined, 2);
+}
+
 // Manage Data from CSV
 function manageCsvData() {
   try {
@@ -243,7 +310,11 @@ function manageCsvData() {
       : RawDataArray;
 
     if (headerKeys) {
-      createBubbleChartData();
+      useFirstRowAsKeys();
+      return;
+    }
+    if (multiDatasets) {
+      useFirstRowAsDatasets();
       return;
     }
     if (headerRow && !headerKeys) {
