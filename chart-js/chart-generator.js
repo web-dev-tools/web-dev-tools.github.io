@@ -30,6 +30,9 @@ const ChartData = {
       },
       y2: {
         display: false
+      },
+      r: {
+        display: false
       }
     },
     plugins: {

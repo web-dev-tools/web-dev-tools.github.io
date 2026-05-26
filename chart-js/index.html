@@ -66,6 +66,7 @@
           <option value="bubble">Bubble Chart</option>
           <option value="pie">Pie Chart</option>
           <option value="doughnut">Doughnut Chart</option>
+          <option value="radar2">Radial Chart</option>
         </select>
 
         <!-- AXIS OPTIONS -->
@@ -188,6 +189,12 @@
                 <i class="form-icon"></i>Reverse Y-Axis
               </label>
             </label>
+
+            <label class="form-label">Y-Axis Scale</label>
+              <label class="form-input">
+                <input class="form-input" name="y-axis-min-scale" data-variable="options.scales.y.suggestedMin" type="number" value="0">
+                <i class="form-icon"></i> Minimum
+              </label>
           </div>
         </details>
 
@@ -198,6 +205,60 @@
             <label class="form-switch grid-col-3-span">
               <input class="form-switch" data-variable="options.scales.y2.display" type="checkbox">
               <i class="form-icon"></i>Enable Second Y-Axis
+            </label>
+            <label class="form-label">Y2-Axis Type
+              <label class="form-radio">
+                <input class="form-switch" name="y2-axis-type" data-variable="options.scales.y2.type" type="radio"
+                  value="linear" checked>
+                <i class="form-icon"></i> Linear
+              </label>
+              <label class="form-radio">
+                <input class="form-switch" name="y2-axis-type" data-variable="options.scales.y2.type" type="radio"
+                  value="category">
+                <i class="form-icon"></i> Category
+              </label>
+            </label>
+            <label class="form-label">Y2-Axis Scale
+              <label class="form-switch">
+                <input class="form-switch" data-variable="options.scales.y2.beginAtZero" type="checkbox" checked>
+                <i class="form-icon"></i>Zero Start
+              </label>
+              <label class="form-switch">
+                <input class="form-switch" data-variable="options.scales.y2.offset" type="checkbox">
+                <i class="form-icon"></i>Y-Offset
+              </label>
+              <label class="form-switch">
+                <input class="form-switch" data-variable="options.scales.y2.grid.offset" type="checkbox">
+                <i class="form-icon"></i>Grid Offset
+              </label>
+            </label>
+            <!-- Y2-AXIS POSITION -->
+            <label class="form-label">Y-Axis Position
+              <label class="form-radio">
+                <input class="form-switch" name="y2-axis-position" data-variable="options.scales.y2.position"
+                  type="radio" value="left" checked>
+                <i class="form-icon"></i> Left
+              </label>
+              <label class="form-radio">
+                <input class="form-switch" name="y2-axis-position" data-variable="options.scales.y2.position"
+                  type="radio" value="right">
+                <i class="form-icon"></i> Right
+              </label>
+              <label class="form-switch">
+                <input class="form-switch" data-variable="options.scales.y2.reverse" type="checkbox">
+                <i class="form-icon"></i>Reverse Y2-Axis
+              </label>
+            </label>
+          </div>
+        </details>
+
+                <!-- R-AXIS OPTIONS -->
+        <details>
+          <summary>R-Axis - Radial Chart</summary>
+          <div class="form-group grid-col-3">
+            <label class="form-switch grid-col-3-span">
+              <input class="form-switch" data-variable="options.scales.r.display" type="checkbox">
+              <i class="form-icon"></i>Enable R-Axis
             </label>
             <label class="form-label">Y2-Axis Type
               <label class="form-radio">
