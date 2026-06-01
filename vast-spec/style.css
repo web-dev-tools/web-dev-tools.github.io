@@ -1,0 +1,10 @@
+main {
+    margin: 32px auto;
+    width: 1280px;
+}
+
+#output {
+    padding: 16px;
+    width: 1280px;
+    height: 560px;
+}

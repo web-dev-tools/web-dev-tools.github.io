@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<head>
+    <title>VAST Specification Inspector</title>
+    <link href='./style.css' rel="stylesheet">
+    <!-- <script src="./node_modules/@ffmpeg/ffmpeg/dist/umd/ffmpeg.js"></script>
+    <script src="./node_modules/@ffmPeg/util/dist/umd/index.js"></script> -->
+</head>
+<body>
+    <main>
+
+        <!-- <textarea id="vast-xml-textarea"></textarea>
+        <button onclick="testVAST()">Test VAST</button> -->
+        
+        <input type="text" id="vast-url-field" value="https://ad.doubleclick.net/ddm/pfadx/N297404.3398549MLB/B35336815.442570649;sz=0x0;ord=[timestamp];dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;dc_tdv=1;dcmt=text/xml;dc_sdk_apis=[APIFRAMEWORKS];dc_omid_p=[OMIDPARTNER];dc_vast=3;dc_mpos=[BREAKPOSITION];ltd="></input>
+        <button onclick="requestVast()">Request VAST</button>
+        
+        <textarea id="output"></textarea>
+        
+    </main>
+    <script src="./vast-spec.js"></script>
+</body>
