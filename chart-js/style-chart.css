@@ -40,3 +40,13 @@ textarea {
   border-radius: 8px;
   box-sizing: border-box;
 }
+
+.chart-dataset {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 12px;
+  padding: 0;
+}
+.chart-dataset p, .chart-dataset input {
+  margin: 4px 0;
+}

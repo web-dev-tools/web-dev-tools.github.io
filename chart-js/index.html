@@ -9,6 +9,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex">
 
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Oxygen:wght@300;400;700&display=swap" rel="stylesheet">
   <!-- Styles -->
   <link href='./style.css' rel="stylesheet">
   <link href='./style-chart.css' rel="stylesheet">
@@ -43,6 +47,18 @@
         </label>
 
         <label class="form-switch">
+          <input class="data-options" data-variable="datasetLabelColumns" type="checkbox">
+          <icon class="form-icon"></icon>
+          Use First Column as Dataset Labels
+        </label>
+
+        <label class="form-switch">
+          <input class="data-options" data-variable="datasetLabelRows" type="checkbox">
+          <icon class="form-icon"></icon>
+          Use First Row as Dataset Labels
+        </label>
+
+        <label class="form-switch">
           <input class="data-options" data-variable="multiDatasets" type="checkbox">
           <icon class="form-icon"></icon>
           Use Each Column as Dataset
@@ -66,7 +82,7 @@
           <option value="bubble">Bubble Chart</option>
           <option value="pie">Pie Chart</option>
           <option value="doughnut">Doughnut Chart</option>
-          <option value="radar2">Radial Chart</option>
+          <option value="radar">Radial Chart</option>
         </select>
 
         <!-- AXIS OPTIONS -->

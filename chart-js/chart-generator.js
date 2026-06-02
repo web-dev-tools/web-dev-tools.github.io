@@ -19,20 +19,53 @@ const ChartData = {
       borderWidth: 2
     }]
   },
+  defaults: {
+    font: {
+      size: 20
+    }
+  },
   options: {
     responsive: true,
     scales: {
       x: {
         type: 'category',
+        ticks: {
+          font: {
+            family: 'Open Sans',
+            size: 12,
+            weight: 'normal'
+          }
+        }
       },
       y: {
-        beginAtZero: true
+        beginAtZero: true,
+        ticks: {
+          font: {
+            family: 'Open Sans',
+            size: 12,
+            weight: 'normal'
+          }
+        }
       },
       y2: {
-        display: false
+        display: false,
+        ticks: {
+          font: {
+            family: 'Open Sans',
+            size: 12,
+            weight: 'normal'
+          }
+        }
       },
       r: {
-        display: false
+        display: false,
+        ticks: {
+          font: {
+            family: 'Open Sans',
+            size: 12,
+            weight: 'normal'
+          }
+        }
       }
     },
     plugins: {
@@ -41,17 +74,45 @@ const ChartData = {
         align: 'center',
         position: 'top',
         text: '',
+        font: {
+          // family: 'Oxygen',
+          family: "Oxygen",
+          size: 24
+        }
       },
       legend: {
         display: true,
         position: 'top',
-        align: 'center'
+        align: 'center',
+        labels: {
+          font: {
+            // family: 'Oxygen',
+            family: "Oxygen",
+            size: 16
+          }
+        }
       },
       subtitle: {
         display: false,
         align: 'center',
         position: 'bottom',
-        text: ''
+        text: '',
+        font: {
+          // family: 'Oxygen',
+          family: "Oxygen",
+          size: 16
+        }
+      },
+      tooltip: {
+        titleFont: {
+          family: 'Open Sans',
+          size: 14,
+          weight: '600'
+        },
+        bodyFont: {
+          family: 'Open Sans',
+          size: 14
+        }
       }
     }
   }
@@ -63,7 +124,9 @@ const DataOptions = {
   headerRow: false,
   headerKeys: false,
   multiDatasets: false,
-  labelColumn: false
+  labelColumn: false,
+  datasetLabelColumns: false,
+  datasetLabelRows: false
 }
 
 // Create the Chart and the Code Block
@@ -186,12 +249,12 @@ function setInitialVariables() {
   else {
     ChartData.options.scales.x.type = 'linear';
   }
-  if (typeof RawDataArray[0][1] !== 'number') {
-    DataOptions.headerRow = true;
-  }
-  if (RawDataArray[0].length >= 3) {
-    DataOptions.multiDatasets = true;
-  }
+  // if (typeof RawDataArray[0][1] !== 'number') {
+  //   DataOptions.headerRow = true;
+  // }
+  // if (RawDataArray[0].length >= 3) {
+  //   DataOptions.multiDatasets = true;
+  // }
 }
 
 // TODO: RENAME
@@ -239,16 +302,16 @@ function useFirstRowAsKeys() {
   const EditedArray = RawDataArray.slice(1)
 
   try {
-  for (let i = 0; i < EditedArray.length; i++) {
-    let values = {};
-    for (let j = 1; j < EditedArray[i].length; j++) {
-      values[RawDataArray[0][j]] = EditedArray[i][j];
+    for (let i = 0; i < EditedArray.length; i++) {
+      let values = {};
+      for (let j = 1; j < EditedArray[i].length; j++) {
+        values[RawDataArray[0][j]] = EditedArray[i][j];
+      }
+      processedData.datasets.push({ data: [] });
+      processedData.datasets[i].data.push(values);
+      processedData.datasets[i].label = EditedArray[i][0]
+      console.log(processedData);
     }
-    processedData.datasets.push({ data: [] });
-    processedData.datasets[i].data.push(values);
-    processedData.datasets[i].label = EditedArray[i][0]
-    console.log(processedData);
-  }
     ChartData.data = processedData;
   }
   catch (error) {
@@ -295,11 +358,87 @@ function useFirstRowAsDatasets() {
   code.value = JSON.stringify(ChartData, undefined, 2);
 }
 
+function useFirstColumnAsLabels() {
+  console.log('Use First Column As Datasets');
+
+  const processedData = {
+    labels: [],
+    datasets: [],
+  }
+
+  const EditedArray = RawDataArray.slice(1);
+  console.log(EditedArray);
+
+  for (let j = 1; j < EditedArray[0].length; j++) {
+    processedData.datasets.push({ data: [], label: RawDataArray[0][j] });
+  }
+
+  try {
+    for (let i = 0; i < EditedArray.length; i++) {
+      processedData.labels.push(EditedArray[i][0]);
+      console.log('i:', i);
+      for (let j = 1; j < EditedArray[i].length; j++) {
+        const datasetIndex = j - 1;
+        processedData.datasets[datasetIndex].data.push(EditedArray[i][j]);
+        // processedData.datasets[datasetIndex].label = EditedArray[i][0];
+      }
+      console.log(processedData);
+    }
+
+    ChartData.data = processedData;
+  }
+  catch (error) {
+    console.log('Failed to Update CSV Data');
+    console.log(error);   
+  }
+
+  VisualChart.update();
+  code.value = JSON.stringify(ChartData, undefined, 2);
+}
+
+function useFirstRowAsLabels() {
+  console.log('Use First Column As Datasets');
+
+  const processedData = {
+    labels: [],
+    datasets: [],
+  }
+
+  const EditedArray = RawDataArray.slice(1);
+  console.log(EditedArray);
+
+  for (let j = 1; j < EditedArray[0].length; j++) {
+    processedData.labels.push(RawDataArray[0][j]);
+  }
+
+  try {
+    for (let i = 0; i < EditedArray.length; i++) {
+      processedData.datasets.push({ data: [] });
+      processedData.datasets[i].label = EditedArray[i][0];
+      console.log('i:', i);
+      for (let j = 1; j < EditedArray[i].length; j++) {
+        const datasetIndex = j - 1;
+        processedData.datasets[i].data.push(EditedArray[i][j]);
+      }
+      console.log(processedData);
+    }
+
+    ChartData.data = processedData;
+  }
+  catch (error) {
+    console.log('Failed to Update CSV Data');
+    console.log(error);   
+  }
+
+  VisualChart.update();
+  code.value = JSON.stringify(ChartData, undefined, 2);
+}
+
 // Manage Data from CSV
 function manageCsvData() {
   try {
     // Import the Data Options & set the initial empty data object
-    const { headerRow, labelColumn, multiDatasets, headerKeys } = DataOptions;
+    const { headerRow, labelColumn, multiDatasets, headerKeys, datasetLabelColumns, datasetLabelRows } = DataOptions;
     const processedData = {
       labels: [],
       datasets: []
@@ -318,6 +457,14 @@ function manageCsvData() {
     }
     if (multiDatasets) {
       useFirstRowAsDatasets();
+      return;
+    }
+    if (datasetLabelColumns) {
+      useFirstColumnAsLabels();
+      return;
+    }
+    if (datasetLabelRows) {
+      useFirstRowAsLabels();
       return;
     }
     if (headerRow && !headerKeys) {
@@ -391,19 +538,36 @@ function insertDataSet() {
 
   for (const [index, dataset] of ChartData.data.datasets.entries()) {
     const containerDiv = document.createElement('div');
+
+    const dataInputWrap = document.createElement('span');
     const dataInput = document.createElement('input');
+    const dataInputText = document.createElement('p');
+
+    const labelInputWrap = document.createElement('span');
     const labelInput = document.createElement('input');
+    const labelInputText = document.createElement('p');
+
+    const colorInputWrap = document.createElement('span');
     const backgroundColorInput = document.createElement('input');
+    const backgroundColorInputText = document.createElement('p');
     const borderColorInput = document.createElement('input');
+    const borderColorInputText = document.createElement('p');
     const borderWidthInput = document.createElement('input');
 
+    // Set and Allow Alpha in the Color Pickers
+    backgroundColorInput.setAttribute('alpha', '');
+    borderColorInput.setAttribute('alpha', '');
+
     dataInput.value = dataset.data.toString();
-    labelInput.value = dataset.label.toString();
+    labelInput.value = dataset.label ?
+      dataset.label.toString() :
+      'Undefined';
     backgroundColorInput.value = dataset.backgroundColor.toString();
+    console.log(dataset.backgroundColor.toString());
     borderColorInput.value = dataset.borderColor.toString();
     borderWidthInput.value = dataset.borderWidth
       ? dataset.borderWidth.toString()
-      : '#000';
+      : '2';
 
     containerDiv.classList = 'chart-dataset';
     dataInput.type = 'text';
@@ -411,6 +575,11 @@ function insertDataSet() {
     backgroundColorInput.type = 'color';
     borderColorInput.type = 'color';
     borderWidthInput.type = 'number';
+
+    dataInputText.innerText = 'Dataset';
+    labelInputText.innerText = 'Dataset Label';
+    backgroundColorInputText.innerText = 'Dataset Color';
+    borderColorInputText.innerText = 'Dataset Border Color';
 
     dataInput.dataset.variable = `data.datasets.${index}.data`;
     dataInput.addEventListener('input', (event) => changeChartOption(event));
@@ -427,12 +596,22 @@ function insertDataSet() {
     borderWidthInput.dataset.variable = `data.datasets.${index}.borderWidth`;
     borderWidthInput.addEventListener('input', (event) => changeChartOption(event));
 
+    // Add Input Wraps to the Container
+    containerDiv.appendChild(labelInputWrap);
+    containerDiv.appendChild(dataInputWrap);
+    containerDiv.appendChild(colorInputWrap);
 
-    containerDiv.appendChild(labelInput);
-    containerDiv.appendChild(dataInput);
-    containerDiv.appendChild(backgroundColorInput);
-    containerDiv.appendChild(borderColorInput);
-    containerDiv.appendChild(borderWidthInput);
+    labelInputWrap.appendChild(labelInputText);
+    labelInputWrap.appendChild(labelInput);
+    
+    dataInputWrap.appendChild(dataInputText);
+    dataInputWrap.appendChild(dataInput);
+    
+    colorInputWrap.appendChild(backgroundColorInputText);
+    colorInputWrap.appendChild(backgroundColorInput);
+    colorInputWrap.appendChild(borderColorInputText);
+    colorInputWrap.appendChild(borderColorInput);
+    colorInputWrap.appendChild(borderWidthInput);
 
 
     datasetContainer.insertAdjacentElement('beforeend', containerDiv);
